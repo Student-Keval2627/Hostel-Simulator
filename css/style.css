@@ -1,0 +1,236 @@
+/* ==============================
+   RESET
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #eeeeea;
+
+    color: #292929;
+
+    min-height: 100vh;
+
+    padding: 25px;
+}
+
+
+/* ==============================
+   GAME CONTAINER
+============================== */
+
+.game-container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+
+/* ==============================
+   TOP BAR
+============================== */
+
+.top-bar {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 16px;
+}
+
+
+.top-bar h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+
+.top-bar p {
+    color: #777;
+}
+
+
+.time-box {
+    background: white;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+    border: 1px solid #d7d7d7;
+}
+
+
+/* ==============================
+   STATS
+============================== */
+
+.stats {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+
+.stat {
+    background: white;
+
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    border: 1px solid #dadada;
+
+    min-width: 125px;
+}
+
+
+.stat span {
+    font-weight: bold;
+}
+
+
+.money {
+    margin-left: auto;
+}
+
+
+/* ==============================
+   CANVAS
+============================== */
+
+.canvas-wrapper {
+    position: relative;
+
+    background: white;
+
+    padding: 10px;
+
+    border-radius: 12px;
+
+    border: 1px solid #d3d3d3;
+}
+
+
+canvas {
+    display: block;
+
+    width: 100%;
+
+    background: #e5dfd4;
+
+    border-radius: 7px;
+}
+
+
+/* ==============================
+   INTERACTION PROMPT
+============================== */
+
+.interaction-prompt {
+    position: absolute;
+
+    bottom: 30px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: rgba(30, 30, 30, 0.92);
+
+    color: white;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    display: none;
+
+    pointer-events: none;
+}
+
+
+/* ==============================
+   GAME MESSAGE
+============================== */
+
+.game-message {
+    margin-top: 12px;
+
+    padding: 12px 15px;
+
+    background: white;
+
+    border: 1px solid #d7d7d7;
+
+    border-radius: 8px;
+
+    min-height: 45px;
+}
+
+
+/* ==============================
+   CONTROLS
+============================== */
+
+.controls {
+    margin-top: 12px;
+
+    background: white;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    border: 1px solid #d7d7d7;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+}
+
+
+.controls span {
+    color: #666;
+}
+
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .top-bar {
+        align-items: flex-start;
+    }
+
+    .money {
+        margin-left: 0;
+    }
+
+}

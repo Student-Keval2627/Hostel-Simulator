@@ -1,6 +1,7 @@
 // =====================================================
 // HOSTEL LIFE LIVE
-// VERSION 0.3
+// VERSION 0.4
+// GROUND FLOOR + MESS SYSTEM
 // =====================================================
 
 
@@ -8,29 +9,53 @@
 // CANVAS
 // =====================================================
 
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const canvas =
+    document.getElementById("gameCanvas");
+
+const ctx =
+    canvas.getContext("2d");
 
 
 // =====================================================
 // HTML ELEMENTS
 // =====================================================
 
-const healthText = document.getElementById("health");
-const hungerText = document.getElementById("hunger");
-const energyText = document.getElementById("energy");
-const moodText = document.getElementById("mood");
-const studyText = document.getElementById("study");
-const moneyText = document.getElementById("money");
+const healthText =
+    document.getElementById("health");
 
-const timeText = document.getElementById("time");
-const dayText = document.getElementById("day");
+const hungerText =
+    document.getElementById("hunger");
+
+const energyText =
+    document.getElementById("energy");
+
+const moodText =
+    document.getElementById("mood");
+
+const studyText =
+    document.getElementById("study");
+
+const moneyText =
+    document.getElementById("money");
+
+const timeText =
+    document.getElementById("time");
+
+const dayText =
+    document.getElementById("day");
+
+const locationText =
+    document.getElementById("location");
 
 const interactionPrompt =
-    document.getElementById("interactionPrompt");
+    document.getElementById(
+        "interactionPrompt"
+    );
 
 const gameMessage =
-    document.getElementById("gameMessage");
+    document.getElementById(
+        "gameMessage"
+    );
 
 
 // =====================================================
@@ -243,13 +268,160 @@ const bench = {
 };
 
 
-const stairs = {
+const corridorStairs = {
 
     x: 730,
     y: 330,
 
     width: 90,
     height: 110,
+
+    interactionDistance: 95
+
+};
+
+
+// =====================================================
+// GROUND FLOOR
+// =====================================================
+
+const groundFloor = {
+
+    x: 40,
+    y: 40,
+
+    width: 820,
+    height: 440
+
+};
+
+
+// =====================================================
+// GROUND FLOOR OBJECTS
+// =====================================================
+
+const reception = {
+
+    x: 90,
+    y: 90,
+
+    width: 180,
+    height: 80
+
+};
+
+
+const groundStairs = {
+
+    x: 700,
+    y: 90,
+
+    width: 100,
+    height: 110,
+
+    interactionDistance: 95
+
+};
+
+
+const messDoor = {
+
+    x: 700,
+    y: 350,
+
+    width: 110,
+    height: 70,
+
+    interactionDistance: 90
+
+};
+
+
+const hostelEntrance = {
+
+    x: 350,
+    y: 435,
+
+    width: 160,
+    height: 45,
+
+    interactionDistance: 80
+
+};
+
+
+const groundBench = {
+
+    x: 300,
+    y: 250,
+
+    width: 180,
+    height: 55
+
+};
+
+
+// =====================================================
+// MESS AREA
+// =====================================================
+
+const mess = {
+
+    x: 40,
+    y: 40,
+
+    width: 820,
+    height: 440
+
+};
+
+
+// =====================================================
+// MESS OBJECTS
+// =====================================================
+
+const messCounter = {
+
+    x: 90,
+    y: 80,
+
+    width: 230,
+    height: 80,
+
+    interactionDistance: 100
+
+};
+
+
+const messTable1 = {
+
+    x: 200,
+    y: 260,
+
+    width: 150,
+    height: 70
+
+};
+
+
+const messTable2 = {
+
+    x: 480,
+    y: 260,
+
+    width: 150,
+    height: 70
+
+};
+
+
+const messExit = {
+
+    x: 700,
+    y: 400,
+
+    width: 120,
+    height: 70,
 
     interactionDistance: 90
 
@@ -270,10 +442,9 @@ document.addEventListener(
         const key =
             event.key.toLowerCase();
 
+
         keys[key] = true;
 
-
-        // Stop browser scrolling
 
         if (
             key === "arrowup" ||
@@ -286,8 +457,6 @@ document.addEventListener(
 
         }
 
-
-        // Interaction
 
         if (
             key === "e" &&
@@ -342,7 +511,7 @@ function rectanglesCollide(
 
 
 // =====================================================
-// CHECK ROOM OBSTACLES
+// ROOM COLLISION
 // =====================================================
 
 function isRoomBlocked(x, y) {
@@ -357,32 +526,17 @@ function isRoomBlocked(x, y) {
     ];
 
 
-    for (const obstacle of obstacles) {
-
-        if (
-            rectanglesCollide(
-                x,
-                y,
-                player.width,
-                player.height,
-                obstacle
-            )
-        ) {
-
-            return true;
-
-        }
-
-    }
-
-
-    return false;
+    return checkObstacles(
+        x,
+        y,
+        obstacles
+    );
 
 }
 
 
 // =====================================================
-// CHECK CORRIDOR OBSTACLES
+// CORRIDOR COLLISION
 // =====================================================
 
 function isCorridorBlocked(x, y) {
@@ -391,12 +545,82 @@ function isCorridorBlocked(x, y) {
 
         waterCooler,
         bench,
-        stairs
+        corridorStairs
 
     ];
 
 
-    for (const obstacle of obstacles) {
+    return checkObstacles(
+        x,
+        y,
+        obstacles
+    );
+
+}
+
+
+// =====================================================
+// GROUND FLOOR COLLISION
+// =====================================================
+
+function isGroundFloorBlocked(x, y) {
+
+    const obstacles = [
+
+        reception,
+        groundStairs,
+        groundBench
+
+    ];
+
+
+    return checkObstacles(
+        x,
+        y,
+        obstacles
+    );
+
+}
+
+
+// =====================================================
+// MESS COLLISION
+// =====================================================
+
+function isMessBlocked(x, y) {
+
+    const obstacles = [
+
+        messCounter,
+        messTable1,
+        messTable2
+
+    ];
+
+
+    return checkObstacles(
+        x,
+        y,
+        obstacles
+    );
+
+}
+
+
+// =====================================================
+// COMMON OBSTACLE CHECK
+// =====================================================
+
+function checkObstacles(
+    x,
+    y,
+    obstacles
+) {
+
+    for (
+        const obstacle
+        of obstacles
+    ) {
 
         if (
             rectanglesCollide(
@@ -421,7 +645,7 @@ function isCorridorBlocked(x, y) {
 
 
 // =====================================================
-// MOVEMENT
+// PLAYER MOVEMENT
 // =====================================================
 
 function movePlayer() {
@@ -470,9 +694,9 @@ function movePlayer() {
     }
 
 
-    // ROOM MOVEMENT
-
-    if (currentScene === "room") {
+    if (
+        currentScene === "room"
+    ) {
 
         moveInsideArea(
             room,
@@ -484,15 +708,43 @@ function movePlayer() {
     }
 
 
-    // CORRIDOR MOVEMENT
-
-    if (currentScene === "corridor") {
+    else if (
+        currentScene === "corridor"
+    ) {
 
         moveInsideArea(
             corridor,
             moveX,
             moveY,
             isCorridorBlocked
+        );
+
+    }
+
+
+    else if (
+        currentScene === "ground"
+    ) {
+
+        moveInsideArea(
+            groundFloor,
+            moveX,
+            moveY,
+            isGroundFloorBlocked
+        );
+
+    }
+
+
+    else if (
+        currentScene === "mess"
+    ) {
+
+        moveInsideArea(
+            mess,
+            moveX,
+            moveY,
+            isMessBlocked
         );
 
     }
@@ -511,16 +763,13 @@ function moveInsideArea(
     collisionFunction
 ) {
 
-    // ----------------------------
-    // X MOVEMENT
-    // ----------------------------
-
     const nextX =
         player.x + moveX;
 
 
     if (
         nextX >= area.x + 8 &&
+
         nextX + player.width <=
         area.x + area.width - 8
     ) {
@@ -540,16 +789,13 @@ function moveInsideArea(
     }
 
 
-    // ----------------------------
-    // Y MOVEMENT
-    // ----------------------------
-
     const nextY =
         player.y + moveY;
 
 
     if (
         nextY >= area.y + 8 &&
+
         nextY + player.height <=
         area.y + area.height - 8
     ) {
@@ -595,20 +841,18 @@ function getDistance(object) {
         object.height / 2;
 
 
-    const distanceX =
+    const dx =
         playerCenterX -
         objectCenterX;
 
-    const distanceY =
+    const dy =
         playerCenterY -
         objectCenterY;
 
 
     return Math.sqrt(
-
-        distanceX * distanceX +
-        distanceY * distanceY
-
+        dx * dx +
+        dy * dy
     );
 
 }
@@ -622,7 +866,9 @@ function getNearbyObject() {
 
     // ROOM
 
-    if (currentScene === "room") {
+    if (
+        currentScene === "room"
+    ) {
 
         if (
             getDistance(bed) <
@@ -668,7 +914,9 @@ function getNearbyObject() {
 
     // CORRIDOR
 
-    if (currentScene === "corridor") {
+    else if (
+        currentScene === "corridor"
+    ) {
 
         if (
             getDistance(corridorRoom101) <
@@ -691,11 +939,77 @@ function getNearbyObject() {
 
 
         if (
-            getDistance(stairs) <
-            stairs.interactionDistance
+            getDistance(corridorStairs) <
+            corridorStairs.interactionDistance
         ) {
 
-            return "stairs";
+            return "corridorStairs";
+
+        }
+
+    }
+
+
+    // GROUND FLOOR
+
+    else if (
+        currentScene === "ground"
+    ) {
+
+        if (
+            getDistance(groundStairs) <
+            groundStairs.interactionDistance
+        ) {
+
+            return "groundStairs";
+
+        }
+
+
+        if (
+            getDistance(messDoor) <
+            messDoor.interactionDistance
+        ) {
+
+            return "messDoor";
+
+        }
+
+
+        if (
+            getDistance(hostelEntrance) <
+            hostelEntrance.interactionDistance
+        ) {
+
+            return "hostelEntrance";
+
+        }
+
+    }
+
+
+    // MESS
+
+    else if (
+        currentScene === "mess"
+    ) {
+
+        if (
+            getDistance(messCounter) <
+            messCounter.interactionDistance
+        ) {
+
+            return "messCounter";
+
+        }
+
+
+        if (
+            getDistance(messExit) <
+            messExit.interactionDistance
+        ) {
+
+            return "messExit";
 
         }
 
@@ -708,7 +1022,7 @@ function getNearbyObject() {
 
 
 // =====================================================
-// PROMPT
+// INTERACTION PROMPT
 // =====================================================
 
 function updateInteractionPrompt() {
@@ -717,58 +1031,54 @@ function updateInteractionPrompt() {
         getNearbyObject();
 
 
-    if (nearby === "bed") {
+    const prompts = {
+
+        bed:
+            "Press E to Sleep 🛏️",
+
+        table:
+            "Press E to Study 📚",
+
+        roommate:
+            "Press E to Talk 👋",
+
+        roomDoor:
+            "Press E to Enter Corridor 🚪",
+
+        room101:
+            "Press E to Enter Room 101 🚪",
+
+        water:
+            "Press E to Drink Water 💧",
+
+        corridorStairs:
+            "Press E to Go Downstairs 🪜",
+
+        groundStairs:
+            "Press E to Go to First Floor 🪜",
+
+        messDoor:
+            "Press E to Enter Mess 🍽️",
+
+        hostelEntrance:
+            "Press E to Go Outside 🚪",
+
+        messCounter:
+            "Press E to Get Food 🍛",
+
+        messExit:
+            "Press E to Leave Mess 🚪"
+
+    };
+
+
+    if (
+        nearby &&
+        prompts[nearby]
+    ) {
 
         showPrompt(
-            "Press E to Sleep 🛏️"
-        );
-
-    }
-
-    else if (nearby === "table") {
-
-        showPrompt(
-            "Press E to Study 📚"
-        );
-
-    }
-
-    else if (nearby === "roommate") {
-
-        showPrompt(
-            "Press E to Talk 👋"
-        );
-
-    }
-
-    else if (nearby === "roomDoor") {
-
-        showPrompt(
-            "Press E to Enter Corridor 🚪"
-        );
-
-    }
-
-    else if (nearby === "room101") {
-
-        showPrompt(
-            "Press E to Enter Room 101 🚪"
-        );
-
-    }
-
-    else if (nearby === "water") {
-
-        showPrompt(
-            "Press E to Drink Water 💧"
-        );
-
-    }
-
-    else if (nearby === "stairs") {
-
-        showPrompt(
-            "Press E to Use Stairs"
+            prompts[nearby]
         );
 
     }
@@ -814,39 +1124,103 @@ function interact() {
 
     }
 
-    else if (nearby === "table") {
+
+    else if (
+        nearby === "table"
+    ) {
 
         study();
 
     }
 
-    else if (nearby === "roommate") {
+
+    else if (
+        nearby === "roommate"
+    ) {
 
         talkToRoommate();
 
     }
 
-    else if (nearby === "roomDoor") {
+
+    else if (
+        nearby === "roomDoor"
+    ) {
 
         enterCorridor();
 
     }
 
-    else if (nearby === "room101") {
+
+    else if (
+        nearby === "room101"
+    ) {
 
         enterRoom();
 
     }
 
-    else if (nearby === "water") {
+
+    else if (
+        nearby === "water"
+    ) {
 
         drinkWater();
 
     }
 
-    else if (nearby === "stairs") {
 
-        useStairs();
+    else if (
+        nearby === "corridorStairs"
+    ) {
+
+        enterGroundFloor();
+
+    }
+
+
+    else if (
+        nearby === "groundStairs"
+    ) {
+
+        returnToFirstFloor();
+
+    }
+
+
+    else if (
+        nearby === "messDoor"
+    ) {
+
+        enterMess();
+
+    }
+
+
+    else if (
+        nearby === "hostelEntrance"
+    ) {
+
+        gameMessage.textContent =
+            "🚧 Outside hostel area will be added later.";
+
+    }
+
+
+    else if (
+        nearby === "messCounter"
+    ) {
+
+        buyFood();
+
+    }
+
+
+    else if (
+        nearby === "messExit"
+    ) {
+
+        leaveMess();
 
     }
 
@@ -888,7 +1262,9 @@ function sleep() {
 
 function study() {
 
-    if (stats.energy < 10) {
+    if (
+        stats.energy < 10
+    ) {
 
         gameMessage.textContent =
             "😴 You are too tired to study.";
@@ -929,6 +1305,7 @@ function talkToRoommate() {
 
     stats.mood += 5;
 
+
     addTime(15);
 
 
@@ -949,17 +1326,13 @@ function talkToRoommate() {
     ];
 
 
-    const randomMessage =
+    gameMessage.textContent =
         messages[
             Math.floor(
                 Math.random() *
                 messages.length
             )
         ];
-
-
-    gameMessage.textContent =
-        randomMessage;
 
 
     clampStats();
@@ -970,7 +1343,7 @@ function talkToRoommate() {
 
 
 // =====================================================
-// ENTER CORRIDOR
+// ROOM → CORRIDOR
 // =====================================================
 
 function enterCorridor() {
@@ -986,14 +1359,19 @@ function enterCorridor() {
         115;
 
 
+    updateLocation(
+        "First Floor Corridor"
+    );
+
+
     gameMessage.textContent =
-        "🚪 You entered the hostel corridor.";
+        "🚪 You entered the first floor corridor.";
 
 }
 
 
 // =====================================================
-// ENTER ROOM
+// CORRIDOR → ROOM
 // =====================================================
 
 function enterRoom() {
@@ -1009,6 +1387,11 @@ function enterRoom() {
         380;
 
 
+    updateLocation(
+        "Hostel Room 101"
+    );
+
+
     gameMessage.textContent =
         "🛏️ You returned to Room 101.";
 
@@ -1016,7 +1399,119 @@ function enterRoom() {
 
 
 // =====================================================
-// DRINK WATER
+// CORRIDOR → GROUND FLOOR
+// =====================================================
+
+function enterGroundFloor() {
+
+    currentScene =
+        "ground";
+
+
+    player.x =
+        650;
+
+    player.y =
+        220;
+
+
+    updateLocation(
+        "Hostel Ground Floor"
+    );
+
+
+    gameMessage.textContent =
+        "🪜 You came down to the hostel ground floor.";
+
+}
+
+
+// =====================================================
+// GROUND FLOOR → CORRIDOR
+// =====================================================
+
+function returnToFirstFloor() {
+
+    currentScene =
+        "corridor";
+
+
+    player.x =
+        650;
+
+    player.y =
+        280;
+
+
+    updateLocation(
+        "First Floor Corridor"
+    );
+
+
+    gameMessage.textContent =
+        "🪜 You returned to the first floor.";
+
+}
+
+
+// =====================================================
+// GROUND FLOOR → MESS
+// =====================================================
+
+function enterMess() {
+
+    currentScene =
+        "mess";
+
+
+    player.x =
+        650;
+
+    player.y =
+        350;
+
+
+    updateLocation(
+        "Hostel Mess"
+    );
+
+
+    gameMessage.textContent =
+        "🍽️ You entered the hostel mess.";
+
+}
+
+
+// =====================================================
+// MESS → GROUND FLOOR
+// =====================================================
+
+function leaveMess() {
+
+    currentScene =
+        "ground";
+
+
+    player.x =
+        620;
+
+    player.y =
+        350;
+
+
+    updateLocation(
+        "Hostel Ground Floor"
+    );
+
+
+    gameMessage.textContent =
+        "🚪 You left the hostel mess.";
+
+}
+
+
+// =====================================================
+// WATER
 // =====================================================
 
 function drinkWater() {
@@ -1030,7 +1525,7 @@ function drinkWater() {
 
 
     gameMessage.textContent =
-        "💧 You drank some water.";
+        "💧 You drank fresh water.";
 
 
     clampStats();
@@ -1041,19 +1536,154 @@ function drinkWater() {
 
 
 // =====================================================
-// STAIRS
+// MESS FOOD SYSTEM
 // =====================================================
 
-function useStairs() {
+function buyFood() {
+
+    let foodName;
+    let price;
+    let hungerGain;
+    let moodGain;
+
+
+    // BREAKFAST
+    // 7 AM - 10 AM
+
+    if (
+        gameHour >= 7 &&
+        gameHour < 10
+    ) {
+
+        foodName =
+            "Breakfast - Poha & Tea";
+
+        price = 30;
+
+        hungerGain = 25;
+
+        moodGain = 4;
+
+    }
+
+
+    // LUNCH
+    // 12 PM - 3 PM
+
+    else if (
+        gameHour >= 12 &&
+        gameHour < 15
+    ) {
+
+        foodName =
+            "Lunch - Dal, Rice, Roti & Sabji";
+
+        price = 50;
+
+        hungerGain = 45;
+
+        moodGain = 5;
+
+    }
+
+
+    // DINNER
+    // 7 PM - 10 PM
+
+    else if (
+        gameHour >= 19 &&
+        gameHour < 22
+    ) {
+
+        foodName =
+            "Dinner - Roti, Sabji & Rice";
+
+        price = 60;
+
+        hungerGain = 50;
+
+        moodGain = 5;
+
+    }
+
+
+    // OTHER TIME
+
+    else {
+
+        foodName =
+            "Maggi & Tea";
+
+        price = 25;
+
+        hungerGain = 18;
+
+        moodGain = 6;
+
+    }
+
+
+    if (
+        stats.money < price
+    ) {
+
+        gameMessage.textContent =
+            "❌ You don't have enough money.";
+
+        return;
+
+    }
+
+
+    if (
+        stats.hunger >= 100
+    ) {
+
+        gameMessage.textContent =
+            "😅 You are already full.";
+
+        return;
+
+    }
+
+
+    stats.money -= price;
+
+    stats.hunger += hungerGain;
+
+    stats.mood += moodGain;
+
+    stats.energy += 3;
+
+
+    addTime(20);
+
+
+    clampStats();
+
+    updateStats();
+
 
     gameMessage.textContent =
-        "🚧 Ground floor is under development. Coming next!";
+        `🍛 ${foodName} eaten. ₹${price} spent. Hunger +${hungerGain}`;
 
 }
 
 
 // =====================================================
-// GAME TIME
+// UPDATE LOCATION
+// =====================================================
+
+function updateLocation(location) {
+
+    locationText.textContent =
+        location;
+
+}
+
+
+// =====================================================
+// ADD TIME
 // =====================================================
 
 function addTime(minutes) {
@@ -1122,12 +1752,12 @@ function updateTime() {
 
     }
 
+
     else if (
         displayHour > 12
     ) {
 
-        displayHour -=
-            12;
+        displayHour -= 12;
 
     }
 
@@ -1152,7 +1782,7 @@ function updateTime() {
 
 
 // =====================================================
-// CLAMP STATS
+// LIMIT STATS
 // =====================================================
 
 function clampStats() {
@@ -1242,32 +1872,9 @@ function updateStats() {
 
 function drawRoom() {
 
-    // FLOOR
-
-    ctx.fillStyle =
-        "#d8cbb9";
-
-    ctx.fillRect(
-        room.x,
-        room.y,
-        room.width,
-        room.height
-    );
-
-
-    // BORDER
-
-    ctx.strokeStyle =
-        "#555";
-
-    ctx.lineWidth =
-        8;
-
-    ctx.strokeRect(
-        room.x,
-        room.y,
-        room.width,
-        room.height
+    drawArea(
+        room,
+        "#d8cbb9"
     );
 
 
@@ -1286,7 +1893,7 @@ function drawRoom() {
 
     drawBed();
 
-    drawTable();
+    drawStudyTable();
 
     drawCupboard();
 
@@ -1298,7 +1905,7 @@ function drawRoom() {
 
 
 // =====================================================
-// BED
+// DRAW BED
 // =====================================================
 
 function drawBed() {
@@ -1336,13 +1943,7 @@ function drawBed() {
     );
 
 
-    ctx.fillStyle =
-        "#333";
-
-    ctx.font =
-        "13px Arial";
-
-    ctx.fillText(
+    drawLabel(
         "BED",
         bed.x + 75,
         bed.y + 55
@@ -1352,10 +1953,10 @@ function drawBed() {
 
 
 // =====================================================
-// TABLE
+// STUDY TABLE
 // =====================================================
 
-function drawTable() {
+function drawStudyTable() {
 
     ctx.fillStyle =
         "#786957";
@@ -1367,8 +1968,6 @@ function drawTable() {
         table.height
     );
 
-
-    // Laptop
 
     ctx.fillStyle =
         "#333";
@@ -1392,13 +1991,7 @@ function drawTable() {
     );
 
 
-    ctx.fillStyle =
-        "#222";
-
-    ctx.font =
-        "13px Arial";
-
-    ctx.fillText(
+    drawLabel(
         "STUDY TABLE",
         table.x + 30,
         table.y + 45
@@ -1424,26 +2017,7 @@ function drawCupboard() {
     );
 
 
-    ctx.fillStyle =
-        "#444";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cupboard.x + 55,
-        cupboard.y + 75,
-        4,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    ctx.font =
-        "12px Arial";
-
-    ctx.fillText(
+    drawLabel(
         "CUPBOARD",
         cupboard.x + 20,
         cupboard.y + 95
@@ -1469,13 +2043,7 @@ function drawRoomDoor() {
     );
 
 
-    ctx.fillStyle =
-        "#eee";
-
-    ctx.font =
-        "14px Arial";
-
-    ctx.fillText(
+    drawWhiteLabel(
         "DOOR",
         roomDoor.x + 40,
         roomDoor.y + 28
@@ -1490,95 +2058,26 @@ function drawRoomDoor() {
 
 function drawRoommate() {
 
-    ctx.fillStyle =
-        "#55616f";
-
-    ctx.fillRect(
+    drawCharacter(
         roommate.x,
         roommate.y,
-        roommate.width,
-        roommate.height
-    );
-
-
-    ctx.fillStyle =
-        "#c99670";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        roommate.x + 16,
-        roommate.y - 7,
-        12,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    ctx.fillStyle =
-        "#333";
-
-    ctx.font =
-        "12px Arial";
-
-    ctx.fillText(
-        "Rahul",
-        roommate.x - 2,
-        roommate.y - 25
+        "#55616f",
+        "#c99670",
+        "Rahul"
     );
 
 }
 
 
 // =====================================================
-// DRAW CORRIDOR
+// CORRIDOR
 // =====================================================
 
 function drawCorridor() {
 
-    // FLOOR
-
-    ctx.fillStyle =
-        "#c9c4bb";
-
-    ctx.fillRect(
-        corridor.x,
-        corridor.y,
-        corridor.width,
-        corridor.height
-    );
-
-
-    // BORDER
-
-    ctx.strokeStyle =
-        "#555";
-
-    ctx.lineWidth =
-        8;
-
-    ctx.strokeRect(
-        corridor.x,
-        corridor.y,
-        corridor.width,
-        corridor.height
-    );
-
-
-    // TITLE
-
-    ctx.fillStyle =
-        "#444";
-
-    ctx.font =
-        "18px Arial";
-
-    ctx.fillText(
-        "Hostel - First Floor Corridor",
-        60,
-        465
+    drawArea(
+        corridor,
+        "#c9c4bb"
     );
 
 
@@ -1587,12 +2086,10 @@ function drawCorridor() {
         "101"
     );
 
-
     drawCorridorDoor(
         corridorRoom102,
         "102"
     );
-
 
     drawCorridorDoor(
         corridorRoom103,
@@ -1602,15 +2099,280 @@ function drawCorridor() {
 
     drawWaterCooler();
 
-    drawBench();
+    drawBench(
+        bench,
+        "BENCH"
+    );
 
-    drawStairs();
+    drawStairs(
+        corridorStairs,
+        "DOWN"
+    );
+
+
+    ctx.fillStyle =
+        "#444";
+
+    ctx.font =
+        "18px Arial";
+
+    ctx.fillText(
+        "First Floor Corridor",
+        60,
+        465
+    );
 
 }
 
 
 // =====================================================
-// CORRIDOR DOORS
+// GROUND FLOOR
+// =====================================================
+
+function drawGroundFloor() {
+
+    drawArea(
+        groundFloor,
+        "#cfc8bb"
+    );
+
+
+    // Reception
+
+    ctx.fillStyle =
+        "#795f4d";
+
+    ctx.fillRect(
+        reception.x,
+        reception.y,
+        reception.width,
+        reception.height
+    );
+
+
+    drawWhiteLabel(
+        "RECEPTION",
+        reception.x + 45,
+        reception.y + 45
+    );
+
+
+    // Bench
+
+    drawBench(
+        groundBench,
+        "WAITING BENCH"
+    );
+
+
+    // Stairs
+
+    drawStairs(
+        groundStairs,
+        "UP"
+    );
+
+
+    // Mess door
+
+    ctx.fillStyle =
+        "#805c45";
+
+    ctx.fillRect(
+        messDoor.x,
+        messDoor.y,
+        messDoor.width,
+        messDoor.height
+    );
+
+
+    drawWhiteLabel(
+        "MESS",
+        messDoor.x + 32,
+        messDoor.y + 40
+    );
+
+
+    // Entrance
+
+    ctx.fillStyle =
+        "#555";
+
+    ctx.fillRect(
+        hostelEntrance.x,
+        hostelEntrance.y,
+        hostelEntrance.width,
+        hostelEntrance.height
+    );
+
+
+    drawWhiteLabel(
+        "MAIN ENTRANCE",
+        hostelEntrance.x + 24,
+        hostelEntrance.y + 28
+    );
+
+
+    ctx.fillStyle =
+        "#444";
+
+    ctx.font =
+        "18px Arial";
+
+    ctx.fillText(
+        "Hostel Ground Floor",
+        60,
+        465
+    );
+
+}
+
+
+// =====================================================
+// MESS
+// =====================================================
+
+function drawMess() {
+
+    drawArea(
+        mess,
+        "#d5c8ac"
+    );
+
+
+    // Counter
+
+    ctx.fillStyle =
+        "#805c45";
+
+    ctx.fillRect(
+        messCounter.x,
+        messCounter.y,
+        messCounter.width,
+        messCounter.height
+    );
+
+
+    drawWhiteLabel(
+        "MESS FOOD COUNTER",
+        messCounter.x + 40,
+        messCounter.y + 45
+    );
+
+
+    // Table 1
+
+    drawMessTable(
+        messTable1,
+        "TABLE 1"
+    );
+
+
+    // Table 2
+
+    drawMessTable(
+        messTable2,
+        "TABLE 2"
+    );
+
+
+    // Exit
+
+    ctx.fillStyle =
+        "#555";
+
+    ctx.fillRect(
+        messExit.x,
+        messExit.y,
+        messExit.width,
+        messExit.height
+    );
+
+
+    drawWhiteLabel(
+        "EXIT",
+        messExit.x + 40,
+        messExit.y + 40
+    );
+
+
+    // Meal timing
+
+    ctx.fillStyle =
+        "#333";
+
+    ctx.font =
+        "14px Arial";
+
+
+    ctx.fillText(
+        "Breakfast: 7 AM - 10 AM",
+        420,
+        100
+    );
+
+
+    ctx.fillText(
+        "Lunch: 12 PM - 3 PM",
+        420,
+        125
+    );
+
+
+    ctx.fillText(
+        "Dinner: 7 PM - 10 PM",
+        420,
+        150
+    );
+
+
+    ctx.fillText(
+        "Other time: Maggi + Tea",
+        420,
+        175
+    );
+
+}
+
+
+// =====================================================
+// DRAW AREA
+// =====================================================
+
+function drawArea(
+    area,
+    color
+) {
+
+    ctx.fillStyle =
+        color;
+
+    ctx.fillRect(
+        area.x,
+        area.y,
+        area.width,
+        area.height
+    );
+
+
+    ctx.strokeStyle =
+        "#555";
+
+    ctx.lineWidth =
+        8;
+
+    ctx.strokeRect(
+        area.x,
+        area.y,
+        area.width,
+        area.height
+    );
+
+}
+
+
+// =====================================================
+// CORRIDOR DOOR
 // =====================================================
 
 function drawCorridorDoor(
@@ -1629,13 +2391,7 @@ function drawCorridorDoor(
     );
 
 
-    ctx.fillStyle =
-        "#ffffff";
-
-    ctx.font =
-        "14px Arial";
-
-    ctx.fillText(
+    drawWhiteLabel(
         `ROOM ${number}`,
         door.x + 20,
         door.y + 23
@@ -1672,13 +2428,7 @@ function drawWaterCooler() {
     );
 
 
-    ctx.fillStyle =
-        "#333";
-
-    ctx.font =
-        "11px Arial";
-
-    ctx.fillText(
+    drawLabel(
         "WATER",
         waterCooler.x + 8,
         waterCooler.y + 58
@@ -1691,29 +2441,26 @@ function drawWaterCooler() {
 // BENCH
 // =====================================================
 
-function drawBench() {
+function drawBench(
+    object,
+    label
+) {
 
     ctx.fillStyle =
         "#786957";
 
     ctx.fillRect(
-        bench.x,
-        bench.y,
-        bench.width,
-        bench.height
+        object.x,
+        object.y,
+        object.width,
+        object.height
     );
 
 
-    ctx.fillStyle =
-        "#eee";
-
-    ctx.font =
-        "12px Arial";
-
-    ctx.fillText(
-        "BENCH",
-        bench.x + 62,
-        bench.y + 33
+    drawWhiteLabel(
+        label,
+        object.x + 35,
+        object.y + 33
     );
 
 }
@@ -1723,16 +2470,19 @@ function drawBench() {
 // STAIRS
 // =====================================================
 
-function drawStairs() {
+function drawStairs(
+    object,
+    label
+) {
 
     ctx.fillStyle =
         "#777";
 
     ctx.fillRect(
-        stairs.x,
-        stairs.y,
-        stairs.width,
-        stairs.height
+        object.x,
+        object.y,
+        object.width,
+        object.height
     );
 
 
@@ -1745,11 +2495,11 @@ function drawStairs() {
 
     for (
         let y =
-            stairs.y + 15;
+            object.y + 15;
 
         y <
-            stairs.y +
-            stairs.height;
+            object.y +
+            object.height;
 
         y += 18
     ) {
@@ -1757,13 +2507,13 @@ function drawStairs() {
         ctx.beginPath();
 
         ctx.moveTo(
-            stairs.x,
+            object.x,
             y
         );
 
         ctx.lineTo(
-            stairs.x +
-            stairs.width,
+            object.x +
+            object.width,
             y
         );
 
@@ -1772,16 +2522,93 @@ function drawStairs() {
     }
 
 
+    drawWhiteLabel(
+        label,
+        object.x + 30,
+        object.y + 60
+    );
+
+}
+
+
+// =====================================================
+// MESS TABLE
+// =====================================================
+
+function drawMessTable(
+    object,
+    label
+) {
+
     ctx.fillStyle =
-        "#fff";
+        "#8a6f55";
+
+    ctx.fillRect(
+        object.x,
+        object.y,
+        object.width,
+        object.height
+    );
+
+
+    drawWhiteLabel(
+        label,
+        object.x + 45,
+        object.y + 40
+    );
+
+}
+
+
+// =====================================================
+// CHARACTER
+// =====================================================
+
+function drawCharacter(
+    x,
+    y,
+    bodyColor,
+    skinColor,
+    name
+) {
+
+    ctx.fillStyle =
+        bodyColor;
+
+    ctx.fillRect(
+        x,
+        y,
+        32,
+        42
+    );
+
+
+    ctx.fillStyle =
+        skinColor;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x + 16,
+        y - 7,
+        12,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#222";
 
     ctx.font =
         "12px Arial";
 
     ctx.fillText(
-        "STAIRS",
-        stairs.x + 22,
-        stairs.y + 60
+        name,
+        x,
+        y - 25
     );
 
 }
@@ -1793,38 +2620,26 @@ function drawStairs() {
 
 function drawPlayer() {
 
-    // BODY
-
-    ctx.fillStyle =
-        "#333";
-
-    ctx.fillRect(
+    drawCharacter(
         player.x,
         player.y,
-        player.width,
-        player.height
+        "#333",
+        "#d5a57d",
+        "You"
     );
 
-
-    // HEAD
-
-    ctx.fillStyle =
-        "#d5a57d";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        player.x + 16,
-        player.y - 7,
-        12,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
+}
 
 
-    // NAME
+// =====================================================
+// LABEL
+// =====================================================
+
+function drawLabel(
+    text,
+    x,
+    y
+) {
 
     ctx.fillStyle =
         "#222";
@@ -1833,16 +2648,41 @@ function drawPlayer() {
         "12px Arial";
 
     ctx.fillText(
-        "You",
-        player.x + 5,
-        player.y - 24
+        text,
+        x,
+        y
     );
 
 }
 
 
 // =====================================================
-// DRAW GAME
+// WHITE LABEL
+// =====================================================
+
+function drawWhiteLabel(
+    text,
+    x,
+    y
+) {
+
+    ctx.fillStyle =
+        "#fff";
+
+    ctx.font =
+        "12px Arial";
+
+    ctx.fillText(
+        text,
+        x,
+        y
+    );
+
+}
+
+
+// =====================================================
+// DRAW
 // =====================================================
 
 function draw() {
@@ -1864,11 +2704,29 @@ function draw() {
     }
 
 
-    if (
+    else if (
         currentScene === "corridor"
     ) {
 
         drawCorridor();
+
+    }
+
+
+    else if (
+        currentScene === "ground"
+    ) {
+
+        drawGroundFloor();
+
+    }
+
+
+    else if (
+        currentScene === "mess"
+    ) {
+
+        drawMess();
 
     }
 
@@ -1899,11 +2757,15 @@ function gameLoop() {
 
 
 // =====================================================
-// START GAME
+// START
 // =====================================================
 
 updateStats();
 
 updateTime();
+
+updateLocation(
+    "Hostel Room 101"
+);
 
 gameLoop();

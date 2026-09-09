@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hostel Life Live</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="game-container">
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+
+            <div>
+                <h1>Hostel Life Live</h1>
+                <p>Day <span id="day">1</span> • Hostel Room 101</p>
+            </div>
+
+            <div
+                class="time-box"
+                id="time"
+            >
+                08:30 AM
+            </div>
+
+        </div>
+
+
+        <!-- PLAYER STATS -->
+        <div class="stats">
+
+            <div class="stat">
+                ❤️ Health
+                <span id="health">100</span>
+            </div>
+
+            <div class="stat">
+                🍔 Hunger
+                <span id="hunger">85</span>
+            </div>
+
+            <div class="stat">
+                ⚡ Energy
+                <span id="energy">90</span>
+            </div>
+
+            <div class="stat">
+                😊 Mood
+                <span id="mood">95</span>
+            </div>
+
+            <div class="stat">
+                📚 Study
+                <span id="study">10</span>
+            </div>
+
+            <div class="stat money">
+                💰 ₹<span id="money">2500</span>
+            </div>
+
+        </div>
+
+
+        <!-- GAME -->
+        <div class="canvas-wrapper">
+
+            <canvas
+                id="gameCanvas"
+                width="900"
+                height="520"
+            ></canvas>
+
+            <!-- INTERACTION MESSAGE -->
+            <div
+                id="interactionPrompt"
+                class="interaction-prompt"
+            >
+            </div>
+
+        </div>
+
+
+        <!-- GAME MESSAGE -->
+        <div
+            id="gameMessage"
+            class="game-message"
+        >
+            Welcome to Hostel Room 101.
+        </div>
+
+
+        <!-- CONTROLS -->
+        <div class="controls">
+
+            <strong>Controls:</strong>
+
+            <span>
+                W A S D / Arrow Keys → Move
+            </span>
+
+            <span>
+                E → Interact
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/game.js"></script>
+
+</body>
+
+</html>

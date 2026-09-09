@@ -1,24 +1,19 @@
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+
 // =====================================================
-// HOSTEL LIFE LIVE
-// VERSION 0.4
-// GROUND FLOOR + MESS SYSTEM
+// HOSTEL SIMULATOR 3D
+// VERSION 0.6
+// REALISTIC ROOM + CAMERA
 // =====================================================
 
 
 // =====================================================
-// CANVAS
+// HTML
 // =====================================================
 
 const canvas =
     document.getElementById("gameCanvas");
-
-const ctx =
-    canvas.getContext("2d");
-
-
-// =====================================================
-// HTML ELEMENTS
-// =====================================================
 
 const healthText =
     document.getElementById("health");
@@ -38,48 +33,11 @@ const studyText =
 const moneyText =
     document.getElementById("money");
 
-const timeText =
-    document.getElementById("time");
-
-const dayText =
-    document.getElementById("day");
-
-const locationText =
-    document.getElementById("location");
+const gameMessage =
+    document.getElementById("gameMessage");
 
 const interactionPrompt =
-    document.getElementById(
-        "interactionPrompt"
-    );
-
-const gameMessage =
-    document.getElementById(
-        "gameMessage"
-    );
-
-
-// =====================================================
-// CURRENT SCENE
-// =====================================================
-
-let currentScene = "room";
-
-
-// =====================================================
-// PLAYER
-// =====================================================
-
-const player = {
-
-    x: 430,
-    y: 300,
-
-    width: 32,
-    height: 42,
-
-    speed: 4
-
-};
+    document.getElementById("interactionPrompt");
 
 
 // =====================================================
@@ -97,1751 +55,6 @@ const stats = {
 
 };
 
-
-// =====================================================
-// GAME TIME
-// =====================================================
-
-let day = 1;
-
-let gameHour = 8;
-let gameMinute = 30;
-
-
-// =====================================================
-// ROOM AREA
-// =====================================================
-
-const room = {
-
-    x: 40,
-    y: 40,
-
-    width: 820,
-    height: 440
-
-};
-
-
-// =====================================================
-// ROOM OBJECTS
-// =====================================================
-
-const bed = {
-
-    x: 80,
-    y: 110,
-
-    width: 180,
-    height: 90,
-
-    interactionDistance: 80
-
-};
-
-
-const table = {
-
-    x: 650,
-    y: 100,
-
-    width: 150,
-    height: 70,
-
-    interactionDistance: 80
-
-};
-
-
-const cupboard = {
-
-    x: 650,
-    y: 310,
-
-    width: 110,
-    height: 150
-
-};
-
-
-const roommate = {
-
-    x: 280,
-    y: 150,
-
-    width: 32,
-    height: 42,
-
-    interactionDistance: 70
-
-};
-
-
-const roomDoor = {
-
-    x: 370,
-    y: 435,
-
-    width: 120,
-    height: 45,
-
-    interactionDistance: 75
-
-};
-
-
-// =====================================================
-// CORRIDOR
-// =====================================================
-
-const corridor = {
-
-    x: 40,
-    y: 40,
-
-    width: 820,
-    height: 440
-
-};
-
-
-// =====================================================
-// CORRIDOR OBJECTS
-// =====================================================
-
-const corridorRoom101 = {
-
-    x: 130,
-    y: 55,
-
-    width: 110,
-    height: 35,
-
-    interactionDistance: 80
-
-};
-
-
-const corridorRoom102 = {
-
-    x: 330,
-    y: 55,
-
-    width: 110,
-    height: 35
-
-};
-
-
-const corridorRoom103 = {
-
-    x: 530,
-    y: 55,
-
-    width: 110,
-    height: 35
-
-};
-
-
-const waterCooler = {
-
-    x: 690,
-    y: 120,
-
-    width: 55,
-    height: 80,
-
-    interactionDistance: 75
-
-};
-
-
-const bench = {
-
-    x: 300,
-    y: 330,
-
-    width: 170,
-    height: 55
-
-};
-
-
-const corridorStairs = {
-
-    x: 730,
-    y: 330,
-
-    width: 90,
-    height: 110,
-
-    interactionDistance: 95
-
-};
-
-
-// =====================================================
-// GROUND FLOOR
-// =====================================================
-
-const groundFloor = {
-
-    x: 40,
-    y: 40,
-
-    width: 820,
-    height: 440
-
-};
-
-
-// =====================================================
-// GROUND FLOOR OBJECTS
-// =====================================================
-
-const reception = {
-
-    x: 90,
-    y: 90,
-
-    width: 180,
-    height: 80
-
-};
-
-
-const groundStairs = {
-
-    x: 700,
-    y: 90,
-
-    width: 100,
-    height: 110,
-
-    interactionDistance: 95
-
-};
-
-
-const messDoor = {
-
-    x: 700,
-    y: 350,
-
-    width: 110,
-    height: 70,
-
-    interactionDistance: 90
-
-};
-
-
-const hostelEntrance = {
-
-    x: 350,
-    y: 435,
-
-    width: 160,
-    height: 45,
-
-    interactionDistance: 80
-
-};
-
-
-const groundBench = {
-
-    x: 300,
-    y: 250,
-
-    width: 180,
-    height: 55
-
-};
-
-
-// =====================================================
-// MESS AREA
-// =====================================================
-
-const mess = {
-
-    x: 40,
-    y: 40,
-
-    width: 820,
-    height: 440
-
-};
-
-
-// =====================================================
-// MESS OBJECTS
-// =====================================================
-
-const messCounter = {
-
-    x: 90,
-    y: 80,
-
-    width: 230,
-    height: 80,
-
-    interactionDistance: 100
-
-};
-
-
-const messTable1 = {
-
-    x: 200,
-    y: 260,
-
-    width: 150,
-    height: 70
-
-};
-
-
-const messTable2 = {
-
-    x: 480,
-    y: 260,
-
-    width: 150,
-    height: 70
-
-};
-
-
-const messExit = {
-
-    x: 700,
-    y: 400,
-
-    width: 120,
-    height: 70,
-
-    interactionDistance: 90
-
-};
-
-
-// =====================================================
-// KEYBOARD
-// =====================================================
-
-const keys = {};
-
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        const key =
-            event.key.toLowerCase();
-
-
-        keys[key] = true;
-
-
-        if (
-            key === "arrowup" ||
-            key === "arrowdown" ||
-            key === "arrowleft" ||
-            key === "arrowright"
-        ) {
-
-            event.preventDefault();
-
-        }
-
-
-        if (
-            key === "e" &&
-            !event.repeat
-        ) {
-
-            interact();
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "keyup",
-    function (event) {
-
-        keys[
-            event.key.toLowerCase()
-        ] = false;
-
-    }
-);
-
-
-// =====================================================
-// RECTANGLE COLLISION
-// =====================================================
-
-function rectanglesCollide(
-    x,
-    y,
-    width,
-    height,
-    object
-) {
-
-    return (
-
-        x < object.x + object.width &&
-
-        x + width > object.x &&
-
-        y < object.y + object.height &&
-
-        y + height > object.y
-
-    );
-
-}
-
-
-// =====================================================
-// ROOM COLLISION
-// =====================================================
-
-function isRoomBlocked(x, y) {
-
-    const obstacles = [
-
-        bed,
-        table,
-        cupboard,
-        roommate
-
-    ];
-
-
-    return checkObstacles(
-        x,
-        y,
-        obstacles
-    );
-
-}
-
-
-// =====================================================
-// CORRIDOR COLLISION
-// =====================================================
-
-function isCorridorBlocked(x, y) {
-
-    const obstacles = [
-
-        waterCooler,
-        bench,
-        corridorStairs
-
-    ];
-
-
-    return checkObstacles(
-        x,
-        y,
-        obstacles
-    );
-
-}
-
-
-// =====================================================
-// GROUND FLOOR COLLISION
-// =====================================================
-
-function isGroundFloorBlocked(x, y) {
-
-    const obstacles = [
-
-        reception,
-        groundStairs,
-        groundBench
-
-    ];
-
-
-    return checkObstacles(
-        x,
-        y,
-        obstacles
-    );
-
-}
-
-
-// =====================================================
-// MESS COLLISION
-// =====================================================
-
-function isMessBlocked(x, y) {
-
-    const obstacles = [
-
-        messCounter,
-        messTable1,
-        messTable2
-
-    ];
-
-
-    return checkObstacles(
-        x,
-        y,
-        obstacles
-    );
-
-}
-
-
-// =====================================================
-// COMMON OBSTACLE CHECK
-// =====================================================
-
-function checkObstacles(
-    x,
-    y,
-    obstacles
-) {
-
-    for (
-        const obstacle
-        of obstacles
-    ) {
-
-        if (
-            rectanglesCollide(
-                x,
-                y,
-                player.width,
-                player.height,
-                obstacle
-            )
-        ) {
-
-            return true;
-
-        }
-
-    }
-
-
-    return false;
-
-}
-
-
-// =====================================================
-// PLAYER MOVEMENT
-// =====================================================
-
-function movePlayer() {
-
-    let moveX = 0;
-    let moveY = 0;
-
-
-    if (
-        keys["w"] ||
-        keys["arrowup"]
-    ) {
-
-        moveY -= player.speed;
-
-    }
-
-
-    if (
-        keys["s"] ||
-        keys["arrowdown"]
-    ) {
-
-        moveY += player.speed;
-
-    }
-
-
-    if (
-        keys["a"] ||
-        keys["arrowleft"]
-    ) {
-
-        moveX -= player.speed;
-
-    }
-
-
-    if (
-        keys["d"] ||
-        keys["arrowright"]
-    ) {
-
-        moveX += player.speed;
-
-    }
-
-
-    if (
-        currentScene === "room"
-    ) {
-
-        moveInsideArea(
-            room,
-            moveX,
-            moveY,
-            isRoomBlocked
-        );
-
-    }
-
-
-    else if (
-        currentScene === "corridor"
-    ) {
-
-        moveInsideArea(
-            corridor,
-            moveX,
-            moveY,
-            isCorridorBlocked
-        );
-
-    }
-
-
-    else if (
-        currentScene === "ground"
-    ) {
-
-        moveInsideArea(
-            groundFloor,
-            moveX,
-            moveY,
-            isGroundFloorBlocked
-        );
-
-    }
-
-
-    else if (
-        currentScene === "mess"
-    ) {
-
-        moveInsideArea(
-            mess,
-            moveX,
-            moveY,
-            isMessBlocked
-        );
-
-    }
-
-}
-
-
-// =====================================================
-// MOVE INSIDE AREA
-// =====================================================
-
-function moveInsideArea(
-    area,
-    moveX,
-    moveY,
-    collisionFunction
-) {
-
-    const nextX =
-        player.x + moveX;
-
-
-    if (
-        nextX >= area.x + 8 &&
-
-        nextX + player.width <=
-        area.x + area.width - 8
-    ) {
-
-        if (
-            !collisionFunction(
-                nextX,
-                player.y
-            )
-        ) {
-
-            player.x =
-                nextX;
-
-        }
-
-    }
-
-
-    const nextY =
-        player.y + moveY;
-
-
-    if (
-        nextY >= area.y + 8 &&
-
-        nextY + player.height <=
-        area.y + area.height - 8
-    ) {
-
-        if (
-            !collisionFunction(
-                player.x,
-                nextY
-            )
-        ) {
-
-            player.y =
-                nextY;
-
-        }
-
-    }
-
-}
-
-
-// =====================================================
-// DISTANCE
-// =====================================================
-
-function getDistance(object) {
-
-    const playerCenterX =
-        player.x +
-        player.width / 2;
-
-    const playerCenterY =
-        player.y +
-        player.height / 2;
-
-
-    const objectCenterX =
-        object.x +
-        object.width / 2;
-
-    const objectCenterY =
-        object.y +
-        object.height / 2;
-
-
-    const dx =
-        playerCenterX -
-        objectCenterX;
-
-    const dy =
-        playerCenterY -
-        objectCenterY;
-
-
-    return Math.sqrt(
-        dx * dx +
-        dy * dy
-    );
-
-}
-
-
-// =====================================================
-// FIND NEARBY OBJECT
-// =====================================================
-
-function getNearbyObject() {
-
-    // ROOM
-
-    if (
-        currentScene === "room"
-    ) {
-
-        if (
-            getDistance(bed) <
-            bed.interactionDistance
-        ) {
-
-            return "bed";
-
-        }
-
-
-        if (
-            getDistance(table) <
-            table.interactionDistance
-        ) {
-
-            return "table";
-
-        }
-
-
-        if (
-            getDistance(roommate) <
-            roommate.interactionDistance
-        ) {
-
-            return "roommate";
-
-        }
-
-
-        if (
-            getDistance(roomDoor) <
-            roomDoor.interactionDistance
-        ) {
-
-            return "roomDoor";
-
-        }
-
-    }
-
-
-    // CORRIDOR
-
-    else if (
-        currentScene === "corridor"
-    ) {
-
-        if (
-            getDistance(corridorRoom101) <
-            corridorRoom101.interactionDistance
-        ) {
-
-            return "room101";
-
-        }
-
-
-        if (
-            getDistance(waterCooler) <
-            waterCooler.interactionDistance
-        ) {
-
-            return "water";
-
-        }
-
-
-        if (
-            getDistance(corridorStairs) <
-            corridorStairs.interactionDistance
-        ) {
-
-            return "corridorStairs";
-
-        }
-
-    }
-
-
-    // GROUND FLOOR
-
-    else if (
-        currentScene === "ground"
-    ) {
-
-        if (
-            getDistance(groundStairs) <
-            groundStairs.interactionDistance
-        ) {
-
-            return "groundStairs";
-
-        }
-
-
-        if (
-            getDistance(messDoor) <
-            messDoor.interactionDistance
-        ) {
-
-            return "messDoor";
-
-        }
-
-
-        if (
-            getDistance(hostelEntrance) <
-            hostelEntrance.interactionDistance
-        ) {
-
-            return "hostelEntrance";
-
-        }
-
-    }
-
-
-    // MESS
-
-    else if (
-        currentScene === "mess"
-    ) {
-
-        if (
-            getDistance(messCounter) <
-            messCounter.interactionDistance
-        ) {
-
-            return "messCounter";
-
-        }
-
-
-        if (
-            getDistance(messExit) <
-            messExit.interactionDistance
-        ) {
-
-            return "messExit";
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-// =====================================================
-// INTERACTION PROMPT
-// =====================================================
-
-function updateInteractionPrompt() {
-
-    const nearby =
-        getNearbyObject();
-
-
-    const prompts = {
-
-        bed:
-            "Press E to Sleep 🛏️",
-
-        table:
-            "Press E to Study 📚",
-
-        roommate:
-            "Press E to Talk 👋",
-
-        roomDoor:
-            "Press E to Enter Corridor 🚪",
-
-        room101:
-            "Press E to Enter Room 101 🚪",
-
-        water:
-            "Press E to Drink Water 💧",
-
-        corridorStairs:
-            "Press E to Go Downstairs 🪜",
-
-        groundStairs:
-            "Press E to Go to First Floor 🪜",
-
-        messDoor:
-            "Press E to Enter Mess 🍽️",
-
-        hostelEntrance:
-            "Press E to Go Outside 🚪",
-
-        messCounter:
-            "Press E to Get Food 🍛",
-
-        messExit:
-            "Press E to Leave Mess 🚪"
-
-    };
-
-
-    if (
-        nearby &&
-        prompts[nearby]
-    ) {
-
-        showPrompt(
-            prompts[nearby]
-        );
-
-    }
-
-    else {
-
-        interactionPrompt.style.display =
-            "none";
-
-    }
-
-}
-
-
-// =====================================================
-// SHOW PROMPT
-// =====================================================
-
-function showPrompt(message) {
-
-    interactionPrompt.textContent =
-        message;
-
-    interactionPrompt.style.display =
-        "block";
-
-}
-
-
-// =====================================================
-// INTERACT
-// =====================================================
-
-function interact() {
-
-    const nearby =
-        getNearbyObject();
-
-
-    if (nearby === "bed") {
-
-        sleep();
-
-    }
-
-
-    else if (
-        nearby === "table"
-    ) {
-
-        study();
-
-    }
-
-
-    else if (
-        nearby === "roommate"
-    ) {
-
-        talkToRoommate();
-
-    }
-
-
-    else if (
-        nearby === "roomDoor"
-    ) {
-
-        enterCorridor();
-
-    }
-
-
-    else if (
-        nearby === "room101"
-    ) {
-
-        enterRoom();
-
-    }
-
-
-    else if (
-        nearby === "water"
-    ) {
-
-        drinkWater();
-
-    }
-
-
-    else if (
-        nearby === "corridorStairs"
-    ) {
-
-        enterGroundFloor();
-
-    }
-
-
-    else if (
-        nearby === "groundStairs"
-    ) {
-
-        returnToFirstFloor();
-
-    }
-
-
-    else if (
-        nearby === "messDoor"
-    ) {
-
-        enterMess();
-
-    }
-
-
-    else if (
-        nearby === "hostelEntrance"
-    ) {
-
-        gameMessage.textContent =
-            "🚧 Outside hostel area will be added later.";
-
-    }
-
-
-    else if (
-        nearby === "messCounter"
-    ) {
-
-        buyFood();
-
-    }
-
-
-    else if (
-        nearby === "messExit"
-    ) {
-
-        leaveMess();
-
-    }
-
-}
-
-
-// =====================================================
-// SLEEP
-// =====================================================
-
-function sleep() {
-
-    stats.energy += 25;
-
-    stats.hunger -= 7;
-
-    stats.health += 3;
-
-    stats.mood += 5;
-
-
-    addTime(120);
-
-
-    gameMessage.textContent =
-        "😴 You slept for 2 hours. Energy restored!";
-
-
-    clampStats();
-
-    updateStats();
-
-}
-
-
-// =====================================================
-// STUDY
-// =====================================================
-
-function study() {
-
-    if (
-        stats.energy < 10
-    ) {
-
-        gameMessage.textContent =
-            "😴 You are too tired to study.";
-
-        return;
-
-    }
-
-
-    stats.study += 10;
-
-    stats.energy -= 10;
-
-    stats.hunger -= 5;
-
-    stats.mood -= 2;
-
-
-    addTime(60);
-
-
-    gameMessage.textContent =
-        "📚 You studied for 1 hour. Study +10";
-
-
-    clampStats();
-
-    updateStats();
-
-}
-
-
-// =====================================================
-// ROOMMATE
-// =====================================================
-
-function talkToRoommate() {
-
-    stats.mood += 5;
-
-
-    addTime(15);
-
-
-    const messages = [
-
-        "👤 Rahul: Bro, canteen chale?",
-
-        "👤 Rahul: Kal assignment submit karna hai!",
-
-        "👤 Rahul: Evening cricket khelenge.",
-
-        "👤 Rahul: Bhai Wi-Fi phir slow hai 😂",
-
-        "👤 Rahul: Mess me aaj kya bana hai?",
-
-        "👤 Rahul: Kal morning class bunk kare? 😅"
-
-    ];
-
-
-    gameMessage.textContent =
-        messages[
-            Math.floor(
-                Math.random() *
-                messages.length
-            )
-        ];
-
-
-    clampStats();
-
-    updateStats();
-
-}
-
-
-// =====================================================
-// ROOM → CORRIDOR
-// =====================================================
-
-function enterCorridor() {
-
-    currentScene =
-        "corridor";
-
-
-    player.x =
-        170;
-
-    player.y =
-        115;
-
-
-    updateLocation(
-        "First Floor Corridor"
-    );
-
-
-    gameMessage.textContent =
-        "🚪 You entered the first floor corridor.";
-
-}
-
-
-// =====================================================
-// CORRIDOR → ROOM
-// =====================================================
-
-function enterRoom() {
-
-    currentScene =
-        "room";
-
-
-    player.x =
-        420;
-
-    player.y =
-        380;
-
-
-    updateLocation(
-        "Hostel Room 101"
-    );
-
-
-    gameMessage.textContent =
-        "🛏️ You returned to Room 101.";
-
-}
-
-
-// =====================================================
-// CORRIDOR → GROUND FLOOR
-// =====================================================
-
-function enterGroundFloor() {
-
-    currentScene =
-        "ground";
-
-
-    player.x =
-        650;
-
-    player.y =
-        220;
-
-
-    updateLocation(
-        "Hostel Ground Floor"
-    );
-
-
-    gameMessage.textContent =
-        "🪜 You came down to the hostel ground floor.";
-
-}
-
-
-// =====================================================
-// GROUND FLOOR → CORRIDOR
-// =====================================================
-
-function returnToFirstFloor() {
-
-    currentScene =
-        "corridor";
-
-
-    player.x =
-        650;
-
-    player.y =
-        280;
-
-
-    updateLocation(
-        "First Floor Corridor"
-    );
-
-
-    gameMessage.textContent =
-        "🪜 You returned to the first floor.";
-
-}
-
-
-// =====================================================
-// GROUND FLOOR → MESS
-// =====================================================
-
-function enterMess() {
-
-    currentScene =
-        "mess";
-
-
-    player.x =
-        650;
-
-    player.y =
-        350;
-
-
-    updateLocation(
-        "Hostel Mess"
-    );
-
-
-    gameMessage.textContent =
-        "🍽️ You entered the hostel mess.";
-
-}
-
-
-// =====================================================
-// MESS → GROUND FLOOR
-// =====================================================
-
-function leaveMess() {
-
-    currentScene =
-        "ground";
-
-
-    player.x =
-        620;
-
-    player.y =
-        350;
-
-
-    updateLocation(
-        "Hostel Ground Floor"
-    );
-
-
-    gameMessage.textContent =
-        "🚪 You left the hostel mess.";
-
-}
-
-
-// =====================================================
-// WATER
-// =====================================================
-
-function drinkWater() {
-
-    stats.health += 2;
-
-    stats.mood += 1;
-
-
-    addTime(5);
-
-
-    gameMessage.textContent =
-        "💧 You drank fresh water.";
-
-
-    clampStats();
-
-    updateStats();
-
-}
-
-
-// =====================================================
-// MESS FOOD SYSTEM
-// =====================================================
-
-function buyFood() {
-
-    let foodName;
-    let price;
-    let hungerGain;
-    let moodGain;
-
-
-    // BREAKFAST
-    // 7 AM - 10 AM
-
-    if (
-        gameHour >= 7 &&
-        gameHour < 10
-    ) {
-
-        foodName =
-            "Breakfast - Poha & Tea";
-
-        price = 30;
-
-        hungerGain = 25;
-
-        moodGain = 4;
-
-    }
-
-
-    // LUNCH
-    // 12 PM - 3 PM
-
-    else if (
-        gameHour >= 12 &&
-        gameHour < 15
-    ) {
-
-        foodName =
-            "Lunch - Dal, Rice, Roti & Sabji";
-
-        price = 50;
-
-        hungerGain = 45;
-
-        moodGain = 5;
-
-    }
-
-
-    // DINNER
-    // 7 PM - 10 PM
-
-    else if (
-        gameHour >= 19 &&
-        gameHour < 22
-    ) {
-
-        foodName =
-            "Dinner - Roti, Sabji & Rice";
-
-        price = 60;
-
-        hungerGain = 50;
-
-        moodGain = 5;
-
-    }
-
-
-    // OTHER TIME
-
-    else {
-
-        foodName =
-            "Maggi & Tea";
-
-        price = 25;
-
-        hungerGain = 18;
-
-        moodGain = 6;
-
-    }
-
-
-    if (
-        stats.money < price
-    ) {
-
-        gameMessage.textContent =
-            "❌ You don't have enough money.";
-
-        return;
-
-    }
-
-
-    if (
-        stats.hunger >= 100
-    ) {
-
-        gameMessage.textContent =
-            "😅 You are already full.";
-
-        return;
-
-    }
-
-
-    stats.money -= price;
-
-    stats.hunger += hungerGain;
-
-    stats.mood += moodGain;
-
-    stats.energy += 3;
-
-
-    addTime(20);
-
-
-    clampStats();
-
-    updateStats();
-
-
-    gameMessage.textContent =
-        `🍛 ${foodName} eaten. ₹${price} spent. Hunger +${hungerGain}`;
-
-}
-
-
-// =====================================================
-// UPDATE LOCATION
-// =====================================================
-
-function updateLocation(location) {
-
-    locationText.textContent =
-        location;
-
-}
-
-
-// =====================================================
-// ADD TIME
-// =====================================================
-
-function addTime(minutes) {
-
-    gameMinute +=
-        minutes;
-
-
-    while (
-        gameMinute >= 60
-    ) {
-
-        gameMinute -= 60;
-
-        gameHour++;
-
-    }
-
-
-    while (
-        gameHour >= 24
-    ) {
-
-        gameHour -= 24;
-
-        day++;
-
-    }
-
-
-    updateTime();
-
-}
-
-
-// =====================================================
-// UPDATE TIME
-// =====================================================
-
-function updateTime() {
-
-    let displayHour =
-        gameHour;
-
-
-    let period =
-        "AM";
-
-
-    if (
-        displayHour >= 12
-    ) {
-
-        period =
-            "PM";
-
-    }
-
-
-    if (
-        displayHour === 0
-    ) {
-
-        displayHour =
-            12;
-
-    }
-
-
-    else if (
-        displayHour > 12
-    ) {
-
-        displayHour -= 12;
-
-    }
-
-
-    const minute =
-        String(
-            gameMinute
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    timeText.textContent =
-        `${displayHour}:${minute} ${period}`;
-
-
-    dayText.textContent =
-        day;
-
-}
-
-
-// =====================================================
-// LIMIT STATS
-// =====================================================
-
-function clampStats() {
-
-    stats.health =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                stats.health
-            )
-        );
-
-
-    stats.hunger =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                stats.hunger
-            )
-        );
-
-
-    stats.energy =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                stats.energy
-            )
-        );
-
-
-    stats.mood =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                stats.mood
-            )
-        );
-
-
-    stats.study =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                stats.study
-            )
-        );
-
-}
-
-
-// =====================================================
-// UPDATE STATS
-// =====================================================
 
 function updateStats() {
 
@@ -1866,891 +79,2533 @@ function updateStats() {
 }
 
 
+updateStats();
+
+
 // =====================================================
-// DRAW ROOM
+// SCENE
 // =====================================================
 
-function drawRoom() {
+const scene =
+    new THREE.Scene();
 
-    drawArea(
-        room,
-        "#d8cbb9"
+scene.background =
+    new THREE.Color(
+        0xb9c8d3
     );
 
 
-    ctx.fillStyle =
-        "#555";
+// =====================================================
+// CAMERA
+// =====================================================
 
-    ctx.font =
-        "18px Arial";
+const camera =
+    new THREE.PerspectiveCamera(
 
-    ctx.fillText(
-        "Hostel Room 101",
-        60,
-        75
+        65,
+
+        canvas.width /
+        canvas.height,
+
+        0.1,
+
+        1000
+
     );
 
 
-    drawBed();
+// Camera rotation
 
-    drawStudyTable();
+let cameraYaw = 0;
 
-    drawCupboard();
+let cameraPitch = 0.32;
 
-    drawRoomDoor();
+let cameraDistance = 6;
 
-    drawRoommate();
+
+// =====================================================
+// RENDERER
+// =====================================================
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        canvas: canvas,
+
+        antialias: true
+
+    });
+
+
+renderer.setSize(
+
+    canvas.width,
+
+    canvas.height,
+
+    false
+
+);
+
+
+renderer.setPixelRatio(
+
+    Math.min(
+
+        window.devicePixelRatio,
+
+        2
+
+    )
+
+);
+
+
+renderer.shadowMap.enabled =
+    true;
+
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+    1.1;
+
+
+// =====================================================
+// MATERIALS
+// =====================================================
+
+const floorMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0x8b6749,
+
+        roughness: 0.75
+
+    });
+
+
+const wallMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0xe7e3d9,
+
+        roughness: 0.9
+
+    });
+
+
+const ceilingMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0xf1f1ed,
+
+        roughness: 1
+
+    });
+
+
+const woodMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0x65462f,
+
+        roughness: 0.65
+
+    });
+
+
+const metalMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0x64686b,
+
+        roughness: 0.35,
+
+        metalness: 0.6
+
+    });
+
+
+// =====================================================
+// LIGHTING
+// =====================================================
+
+
+// Soft general lighting
+
+const ambient =
+    new THREE.HemisphereLight(
+
+        0xdce8ff,
+
+        0x6d665b,
+
+        1.7
+
+    );
+
+
+scene.add(ambient);
+
+
+// Sunlight
+
+const sunlight =
+    new THREE.DirectionalLight(
+
+        0xfff4dd,
+
+        3
+
+    );
+
+
+sunlight.position.set(
+
+    -5,
+
+    8,
+
+    3
+
+);
+
+
+sunlight.castShadow =
+    true;
+
+
+sunlight.shadow.mapSize.set(
+
+    2048,
+
+    2048
+
+);
+
+
+scene.add(sunlight);
+
+
+// Room light
+
+const roomLight =
+    new THREE.PointLight(
+
+        0xfff3d6,
+
+        18,
+
+        14
+
+    );
+
+
+roomLight.position.set(
+
+    0,
+
+    4.3,
+
+    0
+
+);
+
+
+roomLight.castShadow =
+    true;
+
+
+scene.add(roomLight);
+
+
+// =====================================================
+// ROOM FLOOR
+// =====================================================
+
+const floor =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            12,
+
+            0.15,
+
+            10
+
+        ),
+
+        floorMaterial
+
+    );
+
+
+floor.position.y =
+    -0.075;
+
+
+floor.receiveShadow =
+    true;
+
+
+scene.add(floor);
+
+
+// =====================================================
+// FLOOR DETAILS
+// =====================================================
+
+for (
+    let x = -5;
+    x <= 5;
+    x += 1
+) {
+
+    const line =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                0.015,
+
+                0.01,
+
+                10
+
+            ),
+
+            new THREE.MeshStandardMaterial({
+
+                color: 0x74543c
+
+            })
+
+        );
+
+
+    line.position.set(
+
+        x,
+
+        0.01,
+
+        0
+
+    );
+
+
+    scene.add(line);
 
 }
 
 
 // =====================================================
-// DRAW BED
+// WALL CREATOR
 // =====================================================
 
-function drawBed() {
+function createWall(
 
-    ctx.fillStyle =
-        "#856f5e";
+    width,
 
-    ctx.fillRect(
-        bed.x,
-        bed.y,
-        bed.width,
-        bed.height
+    height,
+
+    depth,
+
+    x,
+
+    y,
+
+    z
+
+) {
+
+    const wall =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                width,
+
+                height,
+
+                depth
+
+            ),
+
+            wallMaterial
+
+        );
+
+
+    wall.position.set(
+
+        x,
+
+        y,
+
+        z
+
     );
 
 
-    ctx.fillStyle =
-        "#f1f1f1";
-
-    ctx.fillRect(
-        bed.x + 10,
-        bed.y + 10,
-        60,
-        70
-    );
+    wall.receiveShadow =
+        true;
 
 
-    ctx.fillStyle =
-        "#aaa9a5";
-
-    ctx.fillRect(
-        bed.x + 70,
-        bed.y + 10,
-        100,
-        70
-    );
+    scene.add(wall);
 
 
-    drawLabel(
-        "BED",
-        bed.x + 75,
-        bed.y + 55
-    );
+    return wall;
 
 }
 
 
 // =====================================================
-// STUDY TABLE
+// WALLS
 // =====================================================
 
-function drawStudyTable() {
 
-    ctx.fillStyle =
-        "#786957";
+// Back wall
 
-    ctx.fillRect(
-        table.x,
-        table.y,
-        table.width,
-        table.height
+createWall(
+
+    12,
+
+    5,
+
+    0.2,
+
+    0,
+
+    2.5,
+
+    -5
+
+);
+
+
+// Left
+
+createWall(
+
+    0.2,
+
+    5,
+
+    10,
+
+    -6,
+
+    2.5,
+
+    0
+
+);
+
+
+// Right
+
+createWall(
+
+    0.2,
+
+    5,
+
+    10,
+
+    6,
+
+    2.5,
+
+    0
+
+);
+
+
+// Front left
+
+createWall(
+
+    5,
+
+    5,
+
+    0.2,
+
+    -3.5,
+
+    2.5,
+
+    5
+
+);
+
+
+// Front right
+
+createWall(
+
+    5,
+
+    5,
+
+    0.2,
+
+    3.5,
+
+    2.5,
+
+    5
+
+);
+
+
+// =====================================================
+// CEILING
+// =====================================================
+
+const ceiling =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            12,
+
+            0.12,
+
+            10
+
+        ),
+
+        ceilingMaterial
+
     );
 
 
-    ctx.fillStyle =
-        "#333";
+ceiling.position.y =
+    5;
 
-    ctx.fillRect(
-        table.x + 40,
-        table.y - 30,
-        70,
-        40
+
+scene.add(ceiling);
+
+
+// =====================================================
+// WINDOW
+// =====================================================
+
+const windowFrame =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            3.4,
+
+            2.2,
+
+            0.18
+
+        ),
+
+        metalMaterial
+
     );
 
 
-    ctx.fillStyle =
-        "#888";
+windowFrame.position.set(
 
-    ctx.fillRect(
-        table.x + 45,
-        table.y - 25,
-        60,
-        30
+    -2.5,
+
+    3,
+
+    -4.83
+
+);
+
+
+scene.add(windowFrame);
+
+
+const glass =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            3,
+
+            1.8,
+
+            0.08
+
+        ),
+
+        new THREE.MeshPhysicalMaterial({
+
+            color: 0x92c8dd,
+
+            transparent: true,
+
+            opacity: 0.4,
+
+            roughness: 0.1
+
+        })
+
     );
 
 
-    drawLabel(
-        "STUDY TABLE",
-        table.x + 30,
-        table.y + 45
+glass.position.set(
+
+    -2.5,
+
+    3,
+
+    -4.7
+
+);
+
+
+scene.add(glass);
+
+
+// Window center frame
+
+const windowDivider =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            0.08,
+
+            1.9,
+
+            0.15
+
+        ),
+
+        metalMaterial
+
     );
 
-}
+
+windowDivider.position.set(
+
+    -2.5,
+
+    3,
+
+    -4.62
+
+);
+
+
+scene.add(windowDivider);
+
+
+// =====================================================
+// BED
+// =====================================================
+
+const bedGroup =
+    new THREE.Group();
+
+
+const bedBase =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            3.5,
+
+            0.45,
+
+            2
+
+        ),
+
+        woodMaterial
+
+    );
+
+
+bedBase.position.y =
+    0.3;
+
+
+bedGroup.add(
+    bedBase
+);
+
+
+// Mattress
+
+const mattress =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            3.35,
+
+            0.35,
+
+            1.85
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0xe4e2dc,
+
+            roughness: 0.95
+
+        })
+
+    );
+
+
+mattress.position.y =
+    0.7;
+
+
+bedGroup.add(
+    mattress
+);
+
+
+// Blanket
+
+const blanket =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            1.9,
+
+            0.09,
+
+            1.82
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0x6d8291,
+
+            roughness: 1
+
+        })
+
+    );
+
+
+blanket.position.set(
+
+    0.65,
+
+    0.92,
+
+    0
+
+);
+
+
+bedGroup.add(
+    blanket
+);
+
+
+// Pillow
+
+const pillow =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            0.75,
+
+            0.24,
+
+            1.25
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0xf1efe9
+
+        })
+
+    );
+
+
+pillow.position.set(
+
+    -1.15,
+
+    0.95,
+
+    0
+
+);
+
+
+bedGroup.add(
+    pillow
+);
+
+
+bedGroup.position.set(
+
+    -3.8,
+
+    0,
+
+    -2.7
+
+);
+
+
+bedGroup.traverse(
+
+    object => {
+
+        if (
+            object.isMesh
+        ) {
+
+            object.castShadow =
+                true;
+
+            object.receiveShadow =
+                true;
+
+        }
+
+    }
+
+);
+
+
+scene.add(
+    bedGroup
+);
+
+
+// =====================================================
+// DESK
+// =====================================================
+
+const deskGroup =
+    new THREE.Group();
+
+
+const deskTop =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            3,
+
+            0.18,
+
+            1.3
+
+        ),
+
+        woodMaterial
+
+    );
+
+
+deskTop.position.y =
+    1.45;
+
+
+deskGroup.add(
+    deskTop
+);
+
+
+const deskLegGeometry =
+    new THREE.BoxGeometry(
+
+        0.16,
+
+        1.45,
+
+        0.16
+
+    );
+
+
+const deskLegPositions = [
+
+    [-1.3, 0.72, -0.5],
+
+    [1.3, 0.72, -0.5],
+
+    [-1.3, 0.72, 0.5],
+
+    [1.3, 0.72, 0.5]
+
+];
+
+
+deskLegPositions.forEach(
+
+    position => {
+
+        const leg =
+            new THREE.Mesh(
+
+                deskLegGeometry,
+
+                woodMaterial
+
+            );
+
+
+        leg.position.set(
+            ...position
+        );
+
+
+        deskGroup.add(
+            leg
+        );
+
+    }
+
+);
+
+
+// =====================================================
+// LAPTOP
+// =====================================================
+
+const laptopBase =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            1.2,
+
+            0.08,
+
+            0.8
+
+        ),
+
+        metalMaterial
+
+    );
+
+
+laptopBase.position.set(
+
+    0,
+
+    1.6,
+
+    0
+
+);
+
+
+deskGroup.add(
+    laptopBase
+);
+
+
+const laptopScreen =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            1.2,
+
+            0.8,
+
+            0.06
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0x121820,
+
+            roughness: 0.2
+
+        })
+
+    );
+
+
+laptopScreen.position.set(
+
+    0,
+
+    2,
+
+    -0.37
+
+);
+
+
+laptopScreen.rotation.x =
+    -0.12;
+
+
+deskGroup.add(
+    laptopScreen
+);
+
+
+deskGroup.position.set(
+
+    3.8,
+
+    0,
+
+    -3.1
+
+);
+
+
+deskGroup.traverse(
+
+    object => {
+
+        if (
+            object.isMesh
+        ) {
+
+            object.castShadow =
+                true;
+
+        }
+
+    }
+
+);
+
+
+scene.add(
+    deskGroup
+);
+
+
+// =====================================================
+// CHAIR
+// =====================================================
+
+const chair =
+    new THREE.Group();
+
+
+const chairSeat =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            1,
+
+            0.16,
+
+            1
+
+        ),
+
+        woodMaterial
+
+    );
+
+
+chairSeat.position.y =
+    0.85;
+
+
+chair.add(
+    chairSeat
+);
+
+
+const chairBack =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            1,
+
+            1.25,
+
+            0.14
+
+        ),
+
+        woodMaterial
+
+    );
+
+
+chairBack.position.set(
+
+    0,
+
+    1.5,
+
+    0.43
+
+);
+
+
+chair.add(
+    chairBack
+);
+
+
+chair.position.set(
+
+    3.8,
+
+    0,
+
+    -1.2
+
+);
+
+
+scene.add(
+    chair
+);
 
 
 // =====================================================
 // CUPBOARD
 // =====================================================
 
-function drawCupboard() {
+const cupboard =
+    new THREE.Mesh(
 
-    ctx.fillStyle =
-        "#827466";
+        new THREE.BoxGeometry(
 
-    ctx.fillRect(
-        cupboard.x,
-        cupboard.y,
-        cupboard.width,
-        cupboard.height
+            2,
+
+            3.8,
+
+            1
+
+        ),
+
+        woodMaterial
+
     );
 
 
-    drawLabel(
-        "CUPBOARD",
-        cupboard.x + 20,
-        cupboard.y + 95
-    );
+cupboard.position.set(
 
-}
+    4.6,
 
+    1.9,
 
-// =====================================================
-// ROOM DOOR
-// =====================================================
+    2.7
 
-function drawRoomDoor() {
-
-    ctx.fillStyle =
-        "#675548";
-
-    ctx.fillRect(
-        roomDoor.x,
-        roomDoor.y,
-        roomDoor.width,
-        roomDoor.height
-    );
+);
 
 
-    drawWhiteLabel(
-        "DOOR",
-        roomDoor.x + 40,
-        roomDoor.y + 28
-    );
-
-}
+cupboard.castShadow =
+    true;
 
 
-// =====================================================
-// ROOMMATE
-// =====================================================
-
-function drawRoommate() {
-
-    drawCharacter(
-        roommate.x,
-        roommate.y,
-        "#55616f",
-        "#c99670",
-        "Rahul"
-    );
-
-}
+scene.add(
+    cupboard
+);
 
 
-// =====================================================
-// CORRIDOR
-// =====================================================
+// Cupboard doors line
 
-function drawCorridor() {
+const cupboardLine =
+    new THREE.Mesh(
 
-    drawArea(
-        corridor,
-        "#c9c4bb"
+        new THREE.BoxGeometry(
+
+            0.025,
+
+            3.6,
+
+            1.02
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0x3e2d22
+
+        })
+
     );
 
 
-    drawCorridorDoor(
-        corridorRoom101,
-        "101"
-    );
+cupboardLine.position.set(
 
-    drawCorridorDoor(
-        corridorRoom102,
-        "102"
-    );
+    4.6,
 
-    drawCorridorDoor(
-        corridorRoom103,
-        "103"
-    );
+    1.9,
 
+    2.7
 
-    drawWaterCooler();
+);
 
-    drawBench(
-        bench,
-        "BENCH"
-    );
 
-    drawStairs(
-        corridorStairs,
-        "DOWN"
-    );
+scene.add(
+    cupboardLine
+);
 
 
-    ctx.fillStyle =
-        "#444";
+// Handles
 
-    ctx.font =
-        "18px Arial";
-
-    ctx.fillText(
-        "First Floor Corridor",
-        60,
-        465
-    );
-
-}
-
-
-// =====================================================
-// GROUND FLOOR
-// =====================================================
-
-function drawGroundFloor() {
-
-    drawArea(
-        groundFloor,
-        "#cfc8bb"
-    );
-
-
-    // Reception
-
-    ctx.fillStyle =
-        "#795f4d";
-
-    ctx.fillRect(
-        reception.x,
-        reception.y,
-        reception.width,
-        reception.height
-    );
-
-
-    drawWhiteLabel(
-        "RECEPTION",
-        reception.x + 45,
-        reception.y + 45
-    );
-
-
-    // Bench
-
-    drawBench(
-        groundBench,
-        "WAITING BENCH"
-    );
-
-
-    // Stairs
-
-    drawStairs(
-        groundStairs,
-        "UP"
-    );
-
-
-    // Mess door
-
-    ctx.fillStyle =
-        "#805c45";
-
-    ctx.fillRect(
-        messDoor.x,
-        messDoor.y,
-        messDoor.width,
-        messDoor.height
-    );
-
-
-    drawWhiteLabel(
-        "MESS",
-        messDoor.x + 32,
-        messDoor.y + 40
-    );
-
-
-    // Entrance
-
-    ctx.fillStyle =
-        "#555";
-
-    ctx.fillRect(
-        hostelEntrance.x,
-        hostelEntrance.y,
-        hostelEntrance.width,
-        hostelEntrance.height
-    );
-
-
-    drawWhiteLabel(
-        "MAIN ENTRANCE",
-        hostelEntrance.x + 24,
-        hostelEntrance.y + 28
-    );
-
-
-    ctx.fillStyle =
-        "#444";
-
-    ctx.font =
-        "18px Arial";
-
-    ctx.fillText(
-        "Hostel Ground Floor",
-        60,
-        465
-    );
-
-}
-
-
-// =====================================================
-// MESS
-// =====================================================
-
-function drawMess() {
-
-    drawArea(
-        mess,
-        "#d5c8ac"
-    );
-
-
-    // Counter
-
-    ctx.fillStyle =
-        "#805c45";
-
-    ctx.fillRect(
-        messCounter.x,
-        messCounter.y,
-        messCounter.width,
-        messCounter.height
-    );
-
-
-    drawWhiteLabel(
-        "MESS FOOD COUNTER",
-        messCounter.x + 40,
-        messCounter.y + 45
-    );
-
-
-    // Table 1
-
-    drawMessTable(
-        messTable1,
-        "TABLE 1"
-    );
-
-
-    // Table 2
-
-    drawMessTable(
-        messTable2,
-        "TABLE 2"
-    );
-
-
-    // Exit
-
-    ctx.fillStyle =
-        "#555";
-
-    ctx.fillRect(
-        messExit.x,
-        messExit.y,
-        messExit.width,
-        messExit.height
-    );
-
-
-    drawWhiteLabel(
-        "EXIT",
-        messExit.x + 40,
-        messExit.y + 40
-    );
-
-
-    // Meal timing
-
-    ctx.fillStyle =
-        "#333";
-
-    ctx.font =
-        "14px Arial";
-
-
-    ctx.fillText(
-        "Breakfast: 7 AM - 10 AM",
-        420,
-        100
-    );
-
-
-    ctx.fillText(
-        "Lunch: 12 PM - 3 PM",
-        420,
-        125
-    );
-
-
-    ctx.fillText(
-        "Dinner: 7 PM - 10 PM",
-        420,
-        150
-    );
-
-
-    ctx.fillText(
-        "Other time: Maggi + Tea",
-        420,
-        175
-    );
-
-}
-
-
-// =====================================================
-// DRAW AREA
-// =====================================================
-
-function drawArea(
-    area,
-    color
+for (
+    const offset of [-0.17, 0.17]
 ) {
 
-    ctx.fillStyle =
-        color;
+    const handle =
+        new THREE.Mesh(
 
-    ctx.fillRect(
-        area.x,
-        area.y,
-        area.width,
-        area.height
+            new THREE.SphereGeometry(
+
+                0.06,
+
+                12,
+
+                12
+
+            ),
+
+            metalMaterial
+
+        );
+
+
+    handle.position.set(
+
+        4.6 + offset,
+
+        2,
+
+        2.17
+
     );
 
 
-    ctx.strokeStyle =
-        "#555";
-
-    ctx.lineWidth =
-        8;
-
-    ctx.strokeRect(
-        area.x,
-        area.y,
-        area.width,
-        area.height
+    scene.add(
+        handle
     );
 
 }
 
 
 // =====================================================
-// CORRIDOR DOOR
+// DOOR
 // =====================================================
 
-function drawCorridorDoor(
-    door,
-    number
+const door =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            2,
+
+            3.7,
+
+            0.15
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0x4f3524,
+
+            roughness: 0.7
+
+        })
+
+    );
+
+
+door.position.set(
+
+    0,
+
+    1.85,
+
+    4.9
+
+);
+
+
+door.castShadow =
+    true;
+
+
+scene.add(
+    door
+);
+
+
+// Door handle
+
+const doorHandle =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+
+            0.08,
+
+            16,
+
+            16
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0xcaa74b,
+
+            metalness: 0.8,
+
+            roughness: 0.25
+
+        })
+
+    );
+
+
+doorHandle.position.set(
+
+    0.7,
+
+    1.8,
+
+    4.76
+
+);
+
+
+scene.add(
+    doorHandle
+);
+
+
+// =====================================================
+// TUBE LIGHT
+// =====================================================
+
+const tubeLight =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            2.6,
+
+            0.12,
+
+            0.15
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: 0xffffff,
+
+            emissive: 0xffffff,
+
+            emissiveIntensity: 2
+
+        })
+
+    );
+
+
+tubeLight.position.set(
+
+    2,
+
+    4.25,
+
+    -4.82
+
+);
+
+
+scene.add(
+    tubeLight
+);
+
+
+// =====================================================
+// CEILING FAN
+// =====================================================
+
+const fan =
+    new THREE.Group();
+
+
+const fanRod =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+
+            0.06,
+
+            0.06,
+
+            0.7,
+
+            12
+
+        ),
+
+        metalMaterial
+
+    );
+
+
+fanRod.position.y =
+    -0.3;
+
+
+fan.add(
+    fanRod
+);
+
+
+const fanCenter =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+
+            0.22,
+
+            0.28,
+
+            0.25,
+
+            16
+
+        ),
+
+        metalMaterial
+
+    );
+
+
+fanCenter.rotation.x =
+    Math.PI / 2;
+
+
+fanCenter.position.y =
+    -0.65;
+
+
+fan.add(
+    fanCenter
+);
+
+
+for (
+    let i = 0;
+    i < 3;
+    i++
 ) {
 
-    ctx.fillStyle =
-        "#6e5848";
+    const blade =
+        new THREE.Mesh(
 
-    ctx.fillRect(
-        door.x,
-        door.y,
-        door.width,
-        door.height
-    );
+            new THREE.BoxGeometry(
 
+                1.8,
 
-    drawWhiteLabel(
-        `ROOM ${number}`,
-        door.x + 20,
-        door.y + 23
-    );
+                0.06,
 
-}
+                0.3
 
+            ),
 
-// =====================================================
-// WATER COOLER
-// =====================================================
+            new THREE.MeshStandardMaterial({
 
-function drawWaterCooler() {
+                color: 0x5d5d5d
 
-    ctx.fillStyle =
-        "#d5d9da";
+            })
 
-    ctx.fillRect(
-        waterCooler.x,
-        waterCooler.y,
-        waterCooler.width,
-        waterCooler.height
-    );
+        );
 
 
-    ctx.fillStyle =
-        "#777";
-
-    ctx.fillRect(
-        waterCooler.x + 7,
-        waterCooler.y + 15,
-        40,
-        25
-    );
+    blade.position.x =
+        0.9;
 
 
-    drawLabel(
-        "WATER",
-        waterCooler.x + 8,
-        waterCooler.y + 58
-    );
-
-}
-
-
-// =====================================================
-// BENCH
-// =====================================================
-
-function drawBench(
-    object,
-    label
-) {
-
-    ctx.fillStyle =
-        "#786957";
-
-    ctx.fillRect(
-        object.x,
-        object.y,
-        object.width,
-        object.height
-    );
-
-
-    drawWhiteLabel(
-        label,
-        object.x + 35,
-        object.y + 33
-    );
-
-}
-
-
-// =====================================================
-// STAIRS
-// =====================================================
-
-function drawStairs(
-    object,
-    label
-) {
-
-    ctx.fillStyle =
-        "#777";
-
-    ctx.fillRect(
-        object.x,
-        object.y,
-        object.width,
-        object.height
-    );
-
-
-    ctx.strokeStyle =
-        "#aaa";
-
-    ctx.lineWidth =
+    blade.rotation.y =
+        i *
+        Math.PI *
+        2 /
         3;
 
 
-    for (
-        let y =
-            object.y + 15;
-
-        y <
-            object.y +
-            object.height;
-
-        y += 18
-    ) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            object.x,
-            y
-        );
-
-        ctx.lineTo(
-            object.x +
-            object.width,
-            y
-        );
-
-        ctx.stroke();
-
-    }
+    const bladePivot =
+        new THREE.Group();
 
 
-    drawWhiteLabel(
-        label,
-        object.x + 30,
-        object.y + 60
+    bladePivot.add(
+        blade
+    );
+
+
+    bladePivot.position.y =
+        -0.65;
+
+
+    bladePivot.rotation.y =
+        i *
+        Math.PI *
+        2 /
+        3;
+
+
+    fan.add(
+        bladePivot
     );
 
 }
 
 
-// =====================================================
-// MESS TABLE
-// =====================================================
+fan.position.set(
 
-function drawMessTable(
-    object,
-    label
-) {
+    0,
 
-    ctx.fillStyle =
-        "#8a6f55";
+    4.8,
 
-    ctx.fillRect(
-        object.x,
-        object.y,
-        object.width,
-        object.height
-    );
+    0
+
+);
 
 
-    drawWhiteLabel(
-        label,
-        object.x + 45,
-        object.y + 40
-    );
-
-}
-
-
-// =====================================================
-// CHARACTER
-// =====================================================
-
-function drawCharacter(
-    x,
-    y,
-    bodyColor,
-    skinColor,
-    name
-) {
-
-    ctx.fillStyle =
-        bodyColor;
-
-    ctx.fillRect(
-        x,
-        y,
-        32,
-        42
-    );
-
-
-    ctx.fillStyle =
-        skinColor;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x + 16,
-        y - 7,
-        12,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    ctx.fillStyle =
-        "#222";
-
-    ctx.font =
-        "12px Arial";
-
-    ctx.fillText(
-        name,
-        x,
-        y - 25
-    );
-
-}
+scene.add(
+    fan
+);
 
 
 // =====================================================
 // PLAYER
 // =====================================================
 
-function drawPlayer() {
+const player =
+    new THREE.Group();
 
-    drawCharacter(
-        player.x,
-        player.y,
-        "#333",
-        "#d5a57d",
-        "You"
+
+const shirtMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0x334e68
+
+    });
+
+
+const skinMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0xc78d65
+
+    });
+
+
+const pantsMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color: 0x26282b
+
+    });
+
+
+// Body
+
+const body =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+
+            0.38,
+
+            0.45,
+
+            1.2,
+
+            18
+
+        ),
+
+        shirtMaterial
+
     );
 
-}
+
+body.position.y =
+    1.15;
+
+
+player.add(
+    body
+);
+
+
+// Head
+
+const head =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+
+            0.36,
+
+            24,
+
+            24
+
+        ),
+
+        skinMaterial
+
+    );
+
+
+head.position.y =
+    2;
+
+
+player.add(
+    head
+);
+
+
+// Legs
+
+const leftLeg =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            0.26,
+
+            0.95,
+
+            0.3
+
+        ),
+
+        pantsMaterial
+
+    );
+
+
+leftLeg.position.set(
+
+    -0.2,
+
+    0.3,
+
+    0
+
+);
+
+
+player.add(
+    leftLeg
+);
+
+
+const rightLeg =
+    leftLeg.clone();
+
+
+rightLeg.position.x =
+    0.2;
+
+
+player.add(
+    rightLeg
+);
+
+
+// Arms
+
+const leftArm =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            0.22,
+
+            1,
+
+            0.24
+
+        ),
+
+        skinMaterial
+
+    );
+
+
+leftArm.position.set(
+
+    -0.52,
+
+    1.15,
+
+    0
+
+);
+
+
+player.add(
+    leftArm
+);
+
+
+const rightArm =
+    leftArm.clone();
+
+
+rightArm.position.x =
+    0.52;
+
+
+player.add(
+    rightArm
+);
+
+
+player.position.set(
+
+    0,
+
+    0.45,
+
+    1.5
+
+);
+
+
+player.traverse(
+
+    object => {
+
+        if (
+            object.isMesh
+        ) {
+
+            object.castShadow =
+                true;
+
+        }
+
+    }
+
+);
+
+
+scene.add(
+    player
+);
 
 
 // =====================================================
-// LABEL
+// KEYBOARD
 // =====================================================
 
-function drawLabel(
-    text,
+const keys = {};
+
+
+document.addEventListener(
+
+    "keydown",
+
+    event => {
+
+        keys[
+            event.key.toLowerCase()
+        ] = true;
+
+
+        if (
+            event.key.startsWith(
+                "Arrow"
+            )
+        ) {
+
+            event.preventDefault();
+
+        }
+
+
+        if (
+            event.key.toLowerCase() === "e" &&
+            !event.repeat
+        ) {
+
+            interact();
+
+        }
+
+    }
+
+);
+
+
+document.addEventListener(
+
+    "keyup",
+
+    event => {
+
+        keys[
+            event.key.toLowerCase()
+        ] = false;
+
+    }
+
+);
+
+
+// =====================================================
+// MOUSE CAMERA
+// =====================================================
+
+let dragging = false;
+
+let previousMouseX = 0;
+let previousMouseY = 0;
+
+
+canvas.addEventListener(
+
+    "mousedown",
+
+    event => {
+
+        dragging = true;
+
+        previousMouseX =
+            event.clientX;
+
+        previousMouseY =
+            event.clientY;
+
+    }
+
+);
+
+
+window.addEventListener(
+
+    "mouseup",
+
+    () => {
+
+        dragging = false;
+
+    }
+
+);
+
+
+window.addEventListener(
+
+    "mousemove",
+
+    event => {
+
+        if (
+            !dragging
+        ) {
+
+            return;
+
+        }
+
+
+        const deltaX =
+            event.clientX -
+            previousMouseX;
+
+
+        const deltaY =
+            event.clientY -
+            previousMouseY;
+
+
+        cameraYaw -=
+            deltaX *
+            0.006;
+
+
+        cameraPitch +=
+            deltaY *
+            0.004;
+
+
+        cameraPitch =
+            THREE.MathUtils.clamp(
+
+                cameraPitch,
+
+                0.1,
+
+                0.85
+
+            );
+
+
+        previousMouseX =
+            event.clientX;
+
+        previousMouseY =
+            event.clientY;
+
+    }
+
+);
+
+
+// Mouse wheel camera zoom
+
+canvas.addEventListener(
+
+    "wheel",
+
+    event => {
+
+        event.preventDefault();
+
+
+        cameraDistance +=
+            event.deltaY *
+            0.005;
+
+
+        cameraDistance =
+            THREE.MathUtils.clamp(
+
+                cameraDistance,
+
+                3.8,
+
+                8
+
+            );
+
+    },
+
+    {
+        passive: false
+    }
+
+);
+
+
+// =====================================================
+// COLLISION
+// =====================================================
+
+function isBlocked(
     x,
-    y
+    z
 ) {
 
-    ctx.fillStyle =
-        "#222";
+    // Walls
 
-    ctx.font =
-        "12px Arial";
+    if (
+        x < -5.4 ||
+        x > 5.4 ||
+        z < -4.4 ||
+        z > 4.35
+    ) {
 
-    ctx.fillText(
-        text,
-        x,
-        y
-    );
+        return true;
+
+    }
+
+
+    // Bed
+
+    if (
+        x > -5.6 &&
+        x < -1.7 &&
+        z > -4 &&
+        z < -1.25
+    ) {
+
+        return true;
+
+    }
+
+
+    // Desk
+
+    if (
+        x > 2 &&
+        x < 5.5 &&
+        z > -4.3 &&
+        z < -2
+    ) {
+
+        return true;
+
+    }
+
+
+    // Chair
+
+    if (
+        x > 3 &&
+        x < 4.7 &&
+        z > -2 &&
+        z < -0.4
+    ) {
+
+        return true;
+
+    }
+
+
+    // Cupboard
+
+    if (
+        x > 3.2 &&
+        x < 5.6 &&
+        z > 1.8 &&
+        z < 3.7
+    ) {
+
+        return true;
+
+    }
+
+
+    return false;
 
 }
 
 
 // =====================================================
-// WHITE LABEL
+// MOVEMENT
 // =====================================================
 
-function drawWhiteLabel(
-    text,
-    x,
-    y
-) {
+let walking = false;
 
-    ctx.fillStyle =
-        "#fff";
-
-    ctx.font =
-        "12px Arial";
-
-    ctx.fillText(
-        text,
-        x,
-        y
-    );
-
-}
+let walkTime = 0;
 
 
-// =====================================================
-// DRAW
-// =====================================================
+function updatePlayer() {
 
-function draw() {
+    const speed =
+        keys["shift"]
+            ? 0.1
+            : 0.06;
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+
+    let forward = 0;
+    let side = 0;
 
 
     if (
-        currentScene === "room"
+        keys["w"] ||
+        keys["arrowup"]
     ) {
 
-        drawRoom();
+        forward += 1;
 
     }
 
 
-    else if (
-        currentScene === "corridor"
+    if (
+        keys["s"] ||
+        keys["arrowdown"]
     ) {
 
-        drawCorridor();
+        forward -= 1;
 
     }
 
 
-    else if (
-        currentScene === "ground"
+    if (
+        keys["a"] ||
+        keys["arrowleft"]
     ) {
 
-        drawGroundFloor();
+        side -= 1;
 
     }
 
 
-    else if (
-        currentScene === "mess"
+    if (
+        keys["d"] ||
+        keys["arrowright"]
     ) {
 
-        drawMess();
+        side += 1;
 
     }
 
 
-    drawPlayer();
+    walking =
+        forward !== 0 ||
+        side !== 0;
+
+
+    if (
+        walking
+    ) {
+
+        const direction =
+            new THREE.Vector3();
+
+
+        direction.x =
+            Math.sin(
+                cameraYaw
+            ) *
+            forward +
+            Math.cos(
+                cameraYaw
+            ) *
+            side;
+
+
+        direction.z =
+            -Math.cos(
+                cameraYaw
+            ) *
+            forward +
+            Math.sin(
+                cameraYaw
+            ) *
+            side;
+
+
+        direction.normalize();
+
+
+        const nextX =
+            player.position.x +
+            direction.x *
+            speed;
+
+
+        const nextZ =
+            player.position.z +
+            direction.z *
+            speed;
+
+
+        if (
+            !isBlocked(
+                nextX,
+                player.position.z
+            )
+        ) {
+
+            player.position.x =
+                nextX;
+
+        }
+
+
+        if (
+            !isBlocked(
+                player.position.x,
+                nextZ
+            )
+        ) {
+
+            player.position.z =
+                nextZ;
+
+        }
+
+
+        player.rotation.y =
+            Math.atan2(
+
+                direction.x,
+
+                direction.z
+
+            );
+
+
+        walkTime += 0.14;
+
+
+        leftLeg.rotation.x =
+            Math.sin(
+                walkTime
+            ) *
+            0.55;
+
+
+        rightLeg.rotation.x =
+            -Math.sin(
+                walkTime
+            ) *
+            0.55;
+
+
+        leftArm.rotation.x =
+            -Math.sin(
+                walkTime
+            ) *
+            0.35;
+
+
+        rightArm.rotation.x =
+            Math.sin(
+                walkTime
+            ) *
+            0.35;
+
+    }
+
+
+    else {
+
+        leftLeg.rotation.x = 0;
+
+        rightLeg.rotation.x = 0;
+
+        leftArm.rotation.x = 0;
+
+        rightArm.rotation.x = 0;
+
+    }
 
 }
 
 
 // =====================================================
-// GAME LOOP
+// CAMERA
 // =====================================================
 
-function gameLoop() {
+function updateCamera() {
 
-    movePlayer();
+    const horizontalDistance =
 
-    updateInteractionPrompt();
+        Math.cos(
+            cameraPitch
+        ) *
+        cameraDistance;
 
-    draw();
 
+    const verticalDistance =
+
+        Math.sin(
+            cameraPitch
+        ) *
+        cameraDistance;
+
+
+    const x =
+        player.position.x +
+
+        Math.sin(
+            cameraYaw
+        ) *
+        horizontalDistance;
+
+
+    const z =
+        player.position.z +
+
+        Math.cos(
+            cameraYaw
+        ) *
+        horizontalDistance;
+
+
+    const y =
+        player.position.y +
+        verticalDistance +
+        1.2;
+
+
+    const desired =
+        new THREE.Vector3(
+
+            x,
+
+            y,
+
+            z
+
+        );
+
+
+    camera.position.lerp(
+
+        desired,
+
+        0.12
+
+    );
+
+
+    const target =
+        player.position.clone();
+
+
+    target.y +=
+        1.2;
+
+
+    camera.lookAt(
+        target
+    );
+
+}
+
+
+// =====================================================
+// INTERACTIONS
+// =====================================================
+
+function interact() {
+
+    const bedDistance =
+
+        player.position.distanceTo(
+            bedGroup.position
+        );
+
+
+    const deskDistance =
+
+        player.position.distanceTo(
+            deskGroup.position
+        );
+
+
+    const doorDistance =
+
+        player.position.distanceTo(
+            door.position
+        );
+
+
+    if (
+        bedDistance < 2.4
+    ) {
+
+        stats.energy =
+            Math.min(
+
+                100,
+
+                stats.energy + 20
+
+            );
+
+
+        stats.hunger =
+            Math.max(
+
+                0,
+
+                stats.hunger - 5
+
+            );
+
+
+        updateStats();
+
+
+        gameMessage.textContent =
+            "😴 You rested on the bed. Energy +20";
+
+    }
+
+
+    else if (
+        deskDistance < 2.5
+    ) {
+
+        stats.study =
+            Math.min(
+
+                100,
+
+                stats.study + 10
+
+            );
+
+
+        stats.energy =
+            Math.max(
+
+                0,
+
+                stats.energy - 5
+
+            );
+
+
+        updateStats();
+
+
+        gameMessage.textContent =
+            "📚 You studied using your laptop. Study +10";
+
+    }
+
+
+    else if (
+        doorDistance < 2.4
+    ) {
+
+        gameMessage.textContent =
+            "🚪 Corridor will open in Version 0.7.";
+
+    }
+
+}
+
+
+// =====================================================
+// INTERACTION PROMPT
+// =====================================================
+
+function updatePrompt() {
+
+    const bedDistance =
+
+        player.position.distanceTo(
+            bedGroup.position
+        );
+
+
+    const deskDistance =
+
+        player.position.distanceTo(
+            deskGroup.position
+        );
+
+
+    const doorDistance =
+
+        player.position.distanceTo(
+            door.position
+        );
+
+
+    if (
+        bedDistance < 2.4
+    ) {
+
+        interactionPrompt.style.display =
+            "block";
+
+
+        interactionPrompt.textContent =
+            "E • Sleep";
+
+    }
+
+
+    else if (
+        deskDistance < 2.5
+    ) {
+
+        interactionPrompt.style.display =
+            "block";
+
+
+        interactionPrompt.textContent =
+            "E • Study";
+
+    }
+
+
+    else if (
+        doorDistance < 2.4
+    ) {
+
+        interactionPrompt.style.display =
+            "block";
+
+
+        interactionPrompt.textContent =
+            "E • Open Door";
+
+    }
+
+
+    else {
+
+        interactionPrompt.style.display =
+            "none";
+
+    }
+
+}
+
+
+// =====================================================
+// FAN ANIMATION
+// =====================================================
+
+function updateFan() {
+
+    fan.rotation.y +=
+        0.08;
+
+}
+
+
+// =====================================================
+// ANIMATION
+// =====================================================
+
+function animate() {
 
     requestAnimationFrame(
-        gameLoop
+        animate
+    );
+
+
+    updatePlayer();
+
+    updateCamera();
+
+    updateFan();
+
+    updatePrompt();
+
+
+    renderer.render(
+
+        scene,
+
+        camera
+
     );
 
 }
@@ -2760,12 +2615,8 @@ function gameLoop() {
 // START
 // =====================================================
 
-updateStats();
+gameMessage.textContent =
+    "🎮 WASD to move • Shift to run • Drag mouse to look • Scroll to zoom • E to interact";
 
-updateTime();
 
-updateLocation(
-    "Hostel Room 101"
-);
-
-gameLoop();
+animate();
